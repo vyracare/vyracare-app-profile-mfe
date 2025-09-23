@@ -9,5 +9,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('[name-generic]');
+  protected readonly title = signal('vyracare-app-profile-mfe');
 }

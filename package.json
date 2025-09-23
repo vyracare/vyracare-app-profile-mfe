@@ -1,5 +1,5 @@
 {
-  "name": "[name-generic]",
+  "name": "vyracare-app-profile-mfe",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:[name-generic]": "node dist/[name-generic]/server/server.mjs",
+    "serve:ssr:vyracare-app-profile-mfe": "node dist/vyracare-app-profile-mfe/server/server.mjs",
     "run:all": "node node_modules/@angular-architects/module-federation/src/server/mf-dev-server.js"
   },
   "prettier": {

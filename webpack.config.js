@@ -1,11 +1,11 @@
 const { ModuleFederationPlugin } = require('webpack').container;
 
 module.exports = {
-  output: { uniqueName: "[name-generic]", publicPath: "auto" },
+  output: { uniqueName: "vyracare_app_profile_mfe", publicPath: "auto" },
   optimization: { runtimeChunk: false },
   plugins: [
     new ModuleFederationPlugin({
-      name: "[name-generic]",
+      name: "vyracare_app_profile_mfe",
       filename: "remoteEntry.js",
       exposes: {
         './App': './src/app/app.ts'

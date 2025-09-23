@@ -3,7 +3,7 @@
 	"version": 1,
 	"newProjectRoot": "projects",
 	"projects": {
-		"[name-generic]": {
+		"vyracare-app-profile-mfe": {
 			"projectType": "application",
 			"schematics": {
 				"@schematics/angular:component": {
@@ -30,7 +30,7 @@
 							"src/styles.scss"
 						],
 						"main": "src/main.ts",
-						"outputPath": "dist/[name-generic]",
+						"outputPath": "dist/vyracare-app-profile-mfe",
 						"index": "src/index.html",
 						"extraWebpackConfig": "webpack.config.js",
 						"commonChunk": false
@@ -64,11 +64,11 @@
 					"builder": "ngx-build-plus:dev-server",
 					"configurations": {
 						"production": {
-							"buildTarget": "[name-generic]:build:production",
+							"buildTarget": "vyracare-app-profile-mfe:build:production",
 							"extraWebpackConfig": "webpack.prod.config.js"
 						},
 						"development": {
-							"buildTarget": "[name-generic]:build:development"
+							"buildTarget": "vyracare-app-profile-mfe:build:development"
 						}
 					},
 					"defaultConfiguration": "development",
