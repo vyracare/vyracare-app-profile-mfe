@@ -1,0 +1,22 @@
+name: "🚀 Criar Angular MFE"
+description: "Cria um novo microfrontend Angular baseado no template Angular"
+title: "create:[NOME-DO-PROJETO]"
+labels: ["automation", "angular", "mfe"]
+body:
+  - type: input
+    id: project-name
+    attributes:
+      label: Nome do projeto
+      description: 'Digite o nome do projeto no formato kebab-case (ex: `vyracare-app-profile-mfe`)'
+      placeholder: vyracare-app-profile-mfe
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição do MFE
+      description: Explique brevemente a finalidade do microfrontend
+      placeholder: "Esse microfrontend será responsável por..."
+    validations:
+      required: false
