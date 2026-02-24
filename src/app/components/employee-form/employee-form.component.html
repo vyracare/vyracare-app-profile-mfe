@@ -1,0 +1,93 @@
+<form class="employee-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <fieldset [disabled]="loading" class="form-fieldset">
+    <div class="form-card">
+      <div class="form-header">
+        <h2>Dados do funcionario</h2>
+        <p>Preencha os dados essenciais para liberar o acesso ao sistema.</p>
+      </div>
+
+      <div class="form-grid">
+        <label class="form-field">
+          <span>Nome completo</span>
+          <input
+            type="text"
+            placeholder="Ex: Maria Silva"
+            formControlName="fullName"
+            [class.invalid]="form.controls.fullName.touched && form.controls.fullName.invalid"
+          />
+          <small class="error" *ngIf="form.controls.fullName.touched && form.controls.fullName.invalid">
+            Informe o nome completo.
+          </small>
+        </label>
+
+        <label class="form-field">
+          <span>Email</span>
+          <input
+            type="email"
+            placeholder="email@empresa.com"
+            formControlName="email"
+            [class.invalid]="form.controls.email.touched && form.controls.email.invalid"
+          />
+          <small class="error" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+            Informe um email valido.
+          </small>
+        </label>
+
+        <label class="form-field">
+          <span>Cargo</span>
+          <select formControlName="role" [class.invalid]="form.controls.role.touched && form.controls.role.invalid">
+            <option value="" disabled>Selecione um cargo</option>
+            <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+          </select>
+          <small class="error" *ngIf="form.controls.role.touched && form.controls.role.invalid">
+            Selecione o cargo.
+          </small>
+        </label>
+
+        <label class="form-field">
+          <span>Departamento</span>
+          <input type="text" placeholder="Ex: Clinica geral" formControlName="department" />
+        </label>
+
+        <label class="form-field">
+          <span>Telefone</span>
+          <input type="tel" placeholder="(11) 99999-9999" formControlName="phone" />
+        </label>
+
+        <label class="form-field">
+          <span>Perfil de acesso</span>
+          <select
+            formControlName="accessLevel"
+            [class.invalid]="form.controls.accessLevel.touched && form.controls.accessLevel.invalid"
+          >
+            <option value="" disabled>Selecione o perfil</option>
+            <option *ngFor="let level of accessLevels" [value]="level">{{ level }}</option>
+          </select>
+          <small class="error" *ngIf="form.controls.accessLevel.touched && form.controls.accessLevel.invalid">
+            Defina o perfil de acesso.
+          </small>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <label class="switch">
+          <input type="checkbox" formControlName="active" />
+          <span class="slider"></span>
+        </label>
+        <div>
+          <strong>Status ativo</strong>
+          <p>Usuario pode acessar o sistema apos o cadastro.</p>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost" (click)="resetForm()">Limpar</button>
+        <button type="submit" class="primary" [disabled]="loading">
+          {{ loading ? 'Salvando...' : 'Salvar funcionario' }}
+        </button>
+      </div>
+
+      <p class="error-banner" *ngIf="error">{{ error }}</p>
+    </div>
+  </fieldset>
+</form>
