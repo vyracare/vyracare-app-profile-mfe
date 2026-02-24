@@ -1,0 +1,53 @@
+<section class="employee-page">
+  <nav class="breadcrumb">
+    <a routerLink="/dashboard">Dashboard</a>
+    <span>/</span>
+    <span>Cadastro de funcionarios</span>
+  </nav>
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Equipe e acessos</span>
+      <h1>Cadastro de funcionarios</h1>
+      <p>Registre novos perfis para acessar o sistema com permissoes adequadas.</p>
+    </div>
+    <div class="header-tag">
+      <span>Fluxo seguro</span>
+      <strong>Dados protegidos</strong>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <vyracare-employee-form
+      [loading]="loading()"
+      [error]="error()"
+      (formSubmit)="handleSubmit($event)"
+    ></vyracare-employee-form>
+
+    <aside class="page-side">
+      <div class="side-card">
+        <h3>Padroes recomendados</h3>
+        <ul>
+          <li>Defina um cargo claro para cada area.</li>
+          <li>Utilize e-mail corporativo para autenticar.</li>
+          <li>Mantenha o status ativo apenas quando necessario.</li>
+        </ul>
+      </div>
+      <div class="side-card accent">
+        <h3>Proximos passos</h3>
+        <ul>
+          <li>Envie o convite por e-mail ao salvar.</li>
+          <li>Compartilhe os acessos do painel inicial.</li>
+          <li>Revise permissoes periodicamente.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="success-card" *ngIf="success()">
+    <span class="badge">Concluido</span>
+    <div>
+      <strong>Cadastro finalizado</strong>
+      <p>O funcionario foi registrado e ja pode receber as credenciais.</p>
+    </div>
+  </div>
+</section>

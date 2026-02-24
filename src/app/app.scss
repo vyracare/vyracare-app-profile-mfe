@@ -1,4 +1,13 @@
-.vyracare-app-profile-mfe {
-    padding: 20px;
-    font-family: Arial;
+.user-shell {
+  min-height: 100vh;
+  padding: 2.5rem;
+  background: var(--color-background);
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+@media (max-width: 900px) {
+  .user-shell {
+    padding: 1.5rem;
+  }
 }
