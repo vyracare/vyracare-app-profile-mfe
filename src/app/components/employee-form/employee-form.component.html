@@ -81,10 +81,10 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" class="ghost" (click)="resetForm()">Limpar</button>
-        <button type="submit" class="primary" [disabled]="loading">
+        <vc-button type="button" variant="ghost" (click)="resetForm()">Limpar</vc-button>
+        <vc-button type="submit" [loading]="loading" [disabled]="loading">
           {{ loading ? 'Salvando...' : 'Salvar funcionario' }}
-        </button>
+        </vc-button>
       </div>
 
       <p class="error-banner" *ngIf="error">{{ error }}</p>
