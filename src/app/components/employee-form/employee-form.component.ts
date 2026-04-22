@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { VcButtonComponent } from '@vyracare/design-system';
 import { EmployeeRegistrationPayload } from '../../models/employee.model';
 
 @Component({
   selector: 'vyracare-employee-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, VcButtonComponent],
   templateUrl: './employee-form.component.html',
   styleUrl: './employee-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
