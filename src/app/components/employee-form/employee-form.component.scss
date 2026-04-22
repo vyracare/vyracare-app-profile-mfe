@@ -19,15 +19,31 @@
 .form-header {
   margin-bottom: 1.5rem;
 
-  h2 {
+  h2,
+  vc-heading {
     margin: 0 0 0.35rem;
     color: var(--color-text);
   }
 
-  p {
+  p,
+  vc-text {
     margin: 0;
     color: var(--color-muted);
   }
+}
+
+:host ::ng-deep .form-header vc-heading .vc-heading {
+  margin: 0 0 0.35rem;
+  color: var(--color-text);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+:host ::ng-deep .form-header vc-text .vc-text {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 1rem;
 }
 
 .form-grid {
@@ -146,6 +162,22 @@
   justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 1.75rem;
+}
+
+:host ::ng-deep .form-actions vc-button .vc-button__inner {
+  border-radius: 999px;
+  padding: 0.65rem 1.4rem;
+}
+
+:host ::ng-deep .form-actions vc-button.vc-button--primary .vc-button__inner {
+  background: linear-gradient(135deg, #6e4ef5, #5ac4ff);
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(90, 59, 231, 0.25);
+}
+
+:host ::ng-deep .form-actions vc-button.vc-button--ghost .vc-button__inner {
+  background: #f4f1ff;
+  color: var(--color-primary);
 }
 
 .ghost,

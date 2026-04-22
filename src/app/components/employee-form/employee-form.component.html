@@ -12,7 +12,6 @@
           label="Nome completo"
           placeholder="Ex: Maria Silva"
           formControlName="fullName"
-          [required]="true"
           [error]="
             form.controls.fullName.touched && form.controls.fullName.invalid
               ? 'Informe o nome completo.'
@@ -27,7 +26,6 @@
           mask="email"
           placeholder="email@empresa.com"
           formControlName="email"
-          [required]="true"
           [error]="
             form.controls.email.touched && form.controls.email.invalid
               ? 'Informe um email valido.'
@@ -40,7 +38,6 @@
           label="Cargo"
           placeholder="Selecione um cargo"
           formControlName="role"
-          [required]="true"
           [options]="roleOptions"
           [error]="form.controls.role.touched && form.controls.role.invalid ? 'Selecione o cargo.' : ''"
         ></vc-select>
@@ -66,7 +63,6 @@
           label="Perfil de acesso"
           placeholder="Selecione o perfil"
           formControlName="accessLevel"
-          [required]="true"
           [options]="accessLevelOptions"
           [error]="
             form.controls.accessLevel.touched && form.controls.accessLevel.invalid
