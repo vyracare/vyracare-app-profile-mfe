@@ -32,16 +32,32 @@
   background: linear-gradient(135deg, rgba(90, 59, 231, 0.12), rgba(255, 108, 136, 0.12));
   border: 1px solid rgba(90, 59, 231, 0.12);
 
-  h1 {
+  h1,
+  vc-heading {
     margin: 0 0 0.35rem;
     font-size: 2rem;
     color: var(--color-text);
   }
 
-  p {
+  p,
+  vc-text {
     margin: 0;
     color: var(--color-muted);
   }
+}
+
+:host ::ng-deep .page-header vc-heading .vc-heading {
+  margin: 0 0 0.35rem;
+  color: var(--color-text);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+:host ::ng-deep .page-header vc-text .vc-text {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 1rem;
 }
 
 .eyebrow {
@@ -115,6 +131,31 @@
     background: linear-gradient(150deg, #f4f1ff, #eef6ff);
     border-color: rgba(90, 196, 255, 0.3);
   }
+}
+
+:host ::ng-deep vc-card.side-card > .vc-card {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+:host ::ng-deep vc-card.side-card .vc-card__header {
+  margin-bottom: 0.75rem;
+}
+
+:host ::ng-deep vc-card.side-card .vc-card__title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+:host ::ng-deep vc-card.side-card .vc-card__body {
+  color: var(--color-muted);
+  font-size: 1rem;
 }
 
 .success-card {
