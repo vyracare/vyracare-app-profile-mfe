@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { VcCardComponent, VcHeadingComponent, VcTextComponent } from '@vyracare/design-system';
 import { EmployeeFormComponent } from '../../components/employee-form/employee-form.component';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeRegistrationPayload } from '../../models/employee.model';
@@ -8,7 +9,7 @@ import { EmployeeRegistrationPayload } from '../../models/employee.model';
 @Component({
   selector: 'vyracare-employee-registration-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, EmployeeFormComponent],
+  imports: [CommonModule, RouterLink, EmployeeFormComponent, VcCardComponent, VcHeadingComponent, VcTextComponent],
   templateUrl: './employee-registration.component.html',
   styleUrl: './employee-registration.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

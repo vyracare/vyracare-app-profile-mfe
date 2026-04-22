@@ -1,13 +1,28 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { VcButtonComponent } from '@vyracare/design-system';
+import {
+  VcButtonComponent,
+  VcHeadingComponent,
+  VcInputComponent,
+  VcSelectComponent,
+  VcTextComponent
+} from '@vyracare/design-system';
+import type { VcSelectOption } from '@vyracare/design-system';
 import { EmployeeRegistrationPayload } from '../../models/employee.model';
 
 @Component({
   selector: 'vyracare-employee-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, VcButtonComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    VcButtonComponent,
+    VcHeadingComponent,
+    VcInputComponent,
+    VcSelectComponent,
+    VcTextComponent
+  ],
   templateUrl: './employee-form.component.html',
   styleUrl: './employee-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,6 +34,11 @@ export class EmployeeFormComponent {
 
   readonly roles = ['Clinico', 'Administrativo', 'Financeiro', 'Recepcao', 'Suporte'];
   readonly accessLevels = ['Administrador', 'Gestor', 'Operacional', 'Leitura'];
+  readonly roleOptions: VcSelectOption[] = this.roles.map((role) => ({ label: role, value: role }));
+  readonly accessLevelOptions: VcSelectOption[] = this.accessLevels.map((level) => ({
+    label: level,
+    value: level
+  }));
 
   readonly form: FormGroup<{
     fullName: FormControl<string>;
