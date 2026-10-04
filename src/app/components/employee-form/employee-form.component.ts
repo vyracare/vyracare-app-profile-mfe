@@ -27,6 +27,7 @@ import { EmployeeRegistrationPayload } from '../../models/employee.model';
   styleUrl: './employee-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+/** Mantem os campos, validacoes e eventos do cadastro de funcionario. */
 export class EmployeeFormComponent {
   @Input() loading = false;
   @Input() error: string | null = null;
@@ -70,7 +71,8 @@ export class EmployeeFormComponent {
     });
   }
 
-  onSubmit() {
+  /** Marca campos invalidos ou emite um cadastro completo para a pagina consumidora. */
+  onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -79,7 +81,8 @@ export class EmployeeFormComponent {
     this.formSubmit.emit(this.form.getRawValue());
   }
 
-  resetForm() {
+  /** Restaura os valores padrao de um novo funcionario. */
+  resetForm(): void {
     this.form.reset({
       fullName: '',
       email: '',

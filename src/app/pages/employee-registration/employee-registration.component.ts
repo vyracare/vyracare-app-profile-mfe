@@ -14,6 +14,7 @@ import { EmployeeRegistrationPayload, EmployeeSummary } from '../../models/emplo
   styleUrl: './employee-registration.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+/** Coordena a consulta e o cadastro modal de funcionarios. */
 export class EmployeeRegistrationPageComponent implements OnInit {
   protected readonly employees = signal<EmployeeSummary[]>([]);
   protected readonly loading = signal(false);
@@ -25,10 +26,12 @@ export class EmployeeRegistrationPageComponent implements OnInit {
 
   constructor(private readonly employeeService: EmployeeService) {}
 
+  /** Carrega a lista inicial de funcionarios ativos. */
   ngOnInit(): void {
     this.search('');
   }
 
+  /** Pesquisa funcionarios por nome, e-mail ou telefone e atualiza os estados da tabela. */
   search(value: string): void {
     this.listLoading.set(true);
     this.listError.set(null);
@@ -46,23 +49,27 @@ export class EmployeeRegistrationPageComponent implements OnInit {
     });
   }
 
+  /** Abre o formulario de cadastro com os feedbacks anteriores limpos. */
   openRegistration(): void {
     this.error.set(null);
     this.success.set(false);
     this.registrationModalOpen.set(true);
   }
 
+  /** Fecha o cadastro quando nao existe uma gravacao em andamento. */
   closeRegistration(): void {
     if (!this.loading()) {
       this.registrationModalOpen.set(false);
     }
   }
 
+  /** Fornece uma chave estavel para a renderizacao das linhas de funcionarios. */
   trackEmployee(_: number, employee: EmployeeSummary): string {
     return employee.id;
   }
 
-  handleSubmit(payload: EmployeeRegistrationPayload) {
+  /** Persiste um funcionario, fecha o modal e recarrega a listagem em caso de sucesso. */
+  handleSubmit(payload: EmployeeRegistrationPayload): void {
     this.loading.set(true);
     this.error.set(null);
     this.success.set(false);
