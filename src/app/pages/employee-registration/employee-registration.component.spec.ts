@@ -10,7 +10,8 @@ describe('EmployeeRegistrationPageComponent', () => {
 
   beforeEach(async () => {
     employeeService = {
-      registerEmployee: jest.fn()
+      registerEmployee: jest.fn(),
+      listEmployees: jest.fn().mockReturnValue(of([]))
     } as jest.Mocked<EmployeeService>;
 
     await TestBed.configureTestingModule({
@@ -23,6 +24,61 @@ describe('EmployeeRegistrationPageComponent', () => {
     const fixture = TestBed.createComponent(EmployeeRegistrationPageComponent);
     const component = fixture.componentInstance;
     expect(component).toBeTruthy();
+  });
+
+  it('should load and search employees', () => {
+    const fixture = TestBed.createComponent(EmployeeRegistrationPageComponent);
+    const component = fixture.componentInstance;
+    const employees = [{ id: '1', fullName: 'Maria Silva', email: 'maria@empresa.com', phone: null, role: 'Clinico' }];
+    employeeService.listEmployees.mockReturnValue(of(employees));
+
+    component.ngOnInit();
+    component.search('maria');
+
+    expect(employeeService.listEmployees).toHaveBeenLastCalledWith('maria');
+    expect((component as any).employees()).toEqual(employees);
+    expect((component as any).listLoading()).toBe(false);
+  });
+
+  it('should expose an error when employees cannot be loaded', () => {
+    const fixture = TestBed.createComponent(EmployeeRegistrationPageComponent);
+    const component = fixture.componentInstance;
+    employeeService.listEmployees.mockReturnValue(throwError(() => new Error('fail')));
+
+    component.search('maria');
+
+    expect((component as any).employees()).toEqual([]);
+    expect((component as any).listError()).toBe('Não foi possível carregar os funcionários.');
+    expect((component as any).listLoading()).toBe(false);
+  });
+
+  it('should manage the registration modal without closing during a save', () => {
+    const fixture = TestBed.createComponent(EmployeeRegistrationPageComponent);
+    const component = fixture.componentInstance;
+
+    component.openRegistration();
+    expect((component as any).registrationModalOpen()).toBe(true);
+
+    (component as any).loading.set(true);
+    component.closeRegistration();
+    expect((component as any).registrationModalOpen()).toBe(true);
+
+    (component as any).loading.set(false);
+    component.closeRegistration();
+    expect((component as any).registrationModalOpen()).toBe(false);
+  });
+
+  it('should track employees by id', () => {
+    const fixture = TestBed.createComponent(EmployeeRegistrationPageComponent);
+    const component = fixture.componentInstance;
+
+    expect(component.trackEmployee(0, {
+      id: 'employee-1',
+      fullName: 'Maria Silva',
+      email: 'maria@empresa.com',
+      phone: null,
+      role: null
+    })).toBe('employee-1');
   });
 
   it('should handle successful registration', () => {

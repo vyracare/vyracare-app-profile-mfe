@@ -1,47 +1,62 @@
-<section class="employee-page">
+<main class="employee-page">
   <nav class="breadcrumb">
     <a routerLink="/dashboard">Dashboard</a>
     <span>/</span>
-    <span>Cadastro de funcionarios</span>
+    <span>Funcionários</span>
   </nav>
   <header class="page-header">
     <div>
-      <span class="eyebrow">Equipe e acessos</span>
-      <vc-heading [level]="1">Cadastro de funcionarios</vc-heading>
-      <vc-text [muted]="true">Registre novos perfis para acessar o sistema com permissoes adequadas.</vc-text>
+      <span class="eyebrow">Gestão de acessos</span>
+      <vc-heading [level]="1">Funcionários</vc-heading>
+      <vc-text [muted]="true">Consulte a equipe e mantenha os perfis de acesso organizados.</vc-text>
     </div>
   </header>
 
-  <div class="page-content">
-    <vyracare-employee-form
-      [loading]="loading()"
-      [error]="error()"
-      (formSubmit)="handleSubmit($event)"
-    ></vyracare-employee-form>
-
-    <aside class="page-side">
-      <vc-card class="side-card" title="Padroes recomendados">
-        <ul>
-          <li>Defina um cargo claro para cada area.</li>
-          <li>Utilize e-mail corporativo para autenticar.</li>
-          <li>Mantenha o status ativo apenas quando necessario.</li>
-        </ul>
-      </vc-card>
-      <vc-card class="side-card accent" title="Proximos passos">
-        <ul>
-          <li>Envie o convite por e-mail ao salvar.</li>
-          <li>Compartilhe os acessos do painel inicial.</li>
-          <li>Revise permissoes periodicamente.</li>
-        </ul>
-      </vc-card>
-    </aside>
-  </div>
-
-  <div class="success-card" *ngIf="success()">
-    <span class="badge">Concluido</span>
-    <div>
-      <strong>Cadastro finalizado</strong>
-      <p>O funcionario foi registrado e ja pode receber as credenciais.</p>
+  <section class="table-card">
+    <div class="table-toolbar">
+      <div>
+        <vc-heading [level]="2">Funcionários cadastrados</vc-heading>
+        <vc-text [muted]="true">Localize um perfil por nome, telefone ou e-mail.</vc-text>
+      </div>
+      <button class="primary-action" type="button" (click)="openRegistration()">Cadastrar funcionário</button>
     </div>
+    <div class="search-row">
+      <label>
+        <span>Buscar funcionário</span>
+        <input #searchInput type="search" placeholder="Nome, telefone ou email" (keyup.enter)="search(searchInput.value)" />
+      </label>
+      <vc-button type="button" (click)="search(searchInput.value)">Buscar</vc-button>
+    </div>
+
+    <p class="message success" *ngIf="success()">Funcionário cadastrado com sucesso.</p>
+    <p class="message error" *ngIf="listError()" role="alert">{{ listError() }}</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Funcionário</th><th>Telefone</th><th>E-mail</th><th>Cargo</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr *ngIf="listLoading()"><td colspan="5" class="empty">Carregando funcionários...</td></tr>
+          <tr *ngIf="!listLoading() && employees().length === 0"><td colspan="5" class="empty">Nenhum funcionário encontrado.</td></tr>
+          <tr *ngFor="let employee of employees(); trackBy: trackEmployee">
+            <td><strong>{{ employee.fullName }}</strong></td>
+            <td>{{ employee.phone || 'Não informado' }}</td>
+            <td>{{ employee.email }}</td>
+            <td>{{ employee.role || 'Não informado' }}</td>
+            <td><span class="status active">Ativo</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="modal-backdrop" *ngIf="registrationModalOpen()" (click)="closeRegistration()">
+    <section class="modal" role="dialog" aria-modal="true" aria-label="Cadastrar funcionário" (click)="$event.stopPropagation()">
+      <button class="modal-close" type="button" aria-label="Fechar cadastro" (click)="closeRegistration()">×</button>
+      <vyracare-employee-form
+        [loading]="loading()"
+        [error]="error()"
+        (formSubmit)="handleSubmit($event)"
+      ></vyracare-employee-form>
+    </section>
   </div>
-</section>
+</main>
