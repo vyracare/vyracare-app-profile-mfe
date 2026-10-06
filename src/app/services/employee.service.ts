@@ -13,6 +13,7 @@ export class EmployeeService {
 
   constructor(private readonly http: HttpClient) {}
 
+  /** Lista funcionarios ativos e inativos para a gestao administrativa. */
   listEmployees(search = ''): Observable<EmployeeSummary[]> {
     let params = new HttpParams().set('limit', 100);
     const normalizedSearch = search.trim();
@@ -24,6 +25,7 @@ export class EmployeeService {
     return this.http.get<EmployeeSummary[]>(`${this.apiUrl}/employees/manage`, { params });
   }
 
+  /** Cadastra um funcionario pela rota protegida de administracao. */
   registerEmployee(payload: EmployeeRegistrationPayload): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/employees`, payload);
   }
