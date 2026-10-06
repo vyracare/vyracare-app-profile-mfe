@@ -1,7 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { VcButtonComponent, VcHeadingComponent, VcTextComponent, VcToastService } from '@vyracare/design-system';
+import {
+  VcButtonComponent,
+  VcHeadingComponent,
+  VcModalComponent,
+  VcTextComponent,
+  VcToastService
+} from '@vyracare/design-system';
 import { EmployeeFormComponent } from '../../components/employee-form/employee-form.component';
 import { EmployeeRegistrationPayload, EmployeeSummary, EmployeeUpdatePayload } from '../../models/employee.model';
 import { EmployeeService } from '../../services/employee.service';
@@ -9,7 +15,15 @@ import { EmployeeService } from '../../services/employee.service';
 @Component({
   selector: 'vyracare-employee-edit-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, EmployeeFormComponent, VcButtonComponent, VcHeadingComponent, VcTextComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    EmployeeFormComponent,
+    VcButtonComponent,
+    VcHeadingComponent,
+    VcModalComponent,
+    VcTextComponent
+  ],
   templateUrl: './employee-edit.component.html',
   styleUrl: './employee-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

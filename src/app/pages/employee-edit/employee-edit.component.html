@@ -31,18 +31,24 @@
     (formSubmit)="requestUpdate($event)"
   ></vyracare-employee-form>
 
-  <div class="modal-backdrop" *ngIf="confirmationOpen()" (click)="cancelUpdate()">
-    <section class="confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmation-title" (click)="$event.stopPropagation()">
-      <vc-heading id="confirmation-title" [level]="2">Confirmar alterações</vc-heading>
+  <vc-modal
+    *ngIf="confirmationOpen()"
+    role="alertdialog"
+    labelledBy="confirmation-title"
+    describedBy="confirmation-description"
+    [closeOnBackdrop]="!saving()"
+    [closeOnEscape]="!saving()"
+    (dismissed)="cancelUpdate()"
+  >
+    <vc-heading vcModalHeader id="confirmation-title" [level]="2">Confirmar alterações</vc-heading>
+    <div vcModalBody id="confirmation-description">
       <vc-text>Deseja realmente salvar as alterações deste funcionário?</vc-text>
       <vc-text [muted]="true">A senha atual será preservada. Mudanças no nível de acesso valerão no próximo login.</vc-text>
       <p class="message error" *ngIf="error()" role="alert">{{ error() }}</p>
-      <div class="modal-actions">
-        <vc-button type="button" variant="secondary" [disabled]="saving()" (click)="cancelUpdate()">Cancelar</vc-button>
-        <vc-button type="button" [loading]="saving()" [disabled]="saving()" (click)="confirmUpdate()">
-          {{ saving() ? 'Salvando...' : 'Confirmar e salvar' }}
-        </vc-button>
-      </div>
-    </section>
-  </div>
+    </div>
+    <vc-button vcModalFooter type="button" variant="secondary" [disabled]="saving()" (click)="cancelUpdate()">Cancelar</vc-button>
+    <vc-button vcModalFooter type="button" [loading]="saving()" [disabled]="saving()" (click)="confirmUpdate()">
+      {{ saving() ? 'Salvando...' : 'Confirmar e salvar' }}
+    </vc-button>
+  </vc-modal>
 </main>
