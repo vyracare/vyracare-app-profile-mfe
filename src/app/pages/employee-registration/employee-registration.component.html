@@ -39,16 +39,16 @@
           <tr *ngIf="listLoading()"><td colspan="6" class="empty">Carregando funcionários...</td></tr>
           <tr *ngIf="!listLoading() && employees().length === 0"><td colspan="6" class="empty">Nenhum funcionário encontrado.</td></tr>
           <tr *ngFor="let employee of employees(); trackBy: trackEmployee">
-            <td><strong>{{ employee.fullName }}</strong></td>
+            <td data-label="Funcionário"><strong>{{ employee.fullName }}</strong></td>
             <td>{{ employee.phone || 'Não informado' }}</td>
-            <td>{{ employee.email }}</td>
+            <td data-label="E-mail">{{ employee.email }}</td>
             <td>{{ employee.role || 'Não informado' }}</td>
             <td>
               <span class="status" [class.active]="employee.active" [class.inactive]="!employee.active">
                 {{ employee.active ? 'Ativo' : 'Inativo' }}
               </span>
             </td>
-            <td class="actions-cell">
+            <td class="actions-cell" data-label="Ações">
               <vc-tooltip text="Editar funcionário" position="top">
                 <vc-icon-button icon="pencil-square" ariaLabel="Editar funcionário" variant="soft" (action)="editEmployee(employee)"></vc-icon-button>
               </vc-tooltip>

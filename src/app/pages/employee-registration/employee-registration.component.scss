@@ -35,6 +35,28 @@ th { color: var(--color-muted); font-size: .76rem; text-transform: uppercase; le
 .modal-actions { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.5rem; }
 
 @media (max-width: 720px) {
+  .employee-page { gap: 1rem; }
+  .breadcrumb { overflow-x: auto; white-space: nowrap; font-size: .78rem; }
+  .page-header { padding: 1rem; border-radius: 16px; }
+  :host ::ng-deep .page-header .vc-heading { font-size: 1.55rem; }
+  .eyebrow { margin-bottom: .55rem; font-size: .67rem; }
+  .table-card { padding: 1rem; border-radius: 16px; }
   .page-header, .table-toolbar, .search-row, .modal-actions { align-items: stretch; flex-direction: column; }
-  .primary-action { text-align: center; }
+  .primary-action { min-height: 44px; box-sizing: border-box; text-align: center; }
+  .table-wrapper { overflow: visible; }
+  table, tbody { display: block; width: 100%; min-width: 0; }
+  thead { display: none; }
+  tr { display: grid; gap: .65rem; margin-top: .8rem; padding: 1rem; border: 1px solid #ececf5; border-radius: 14px; background: #fcfbff; }
+  td { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 0; border: 0; text-align: right; overflow-wrap: anywhere; }
+  td::before { flex: 0 0 auto; color: var(--color-muted); font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  td:nth-child(2)::before { content: 'Telefone'; }
+  td:nth-child(3)::before { content: 'E-mail'; }
+  td:nth-child(4)::before { content: 'Cargo'; }
+  td:nth-child(5)::before { content: 'Status'; }
+  td:first-child { display: block; text-align: left; font-size: 1rem; }
+  td.empty { display: block; padding: .75rem 0; text-align: center; }
+  td.actions-cell { align-items: center; justify-content: flex-end; padding-top: .6rem; border-top: 1px solid #ececf5; }
+  td.actions-cell::before { content: 'Ações'; margin-right: auto; }
+  .modal-backdrop { place-items: end center; padding: 0; }
+  .confirmation-modal { width: 100%; max-height: 88dvh; padding: 1.25rem; border-radius: 20px 20px 0 0; }
 }

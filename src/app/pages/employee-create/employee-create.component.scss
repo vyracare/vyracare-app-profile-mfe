@@ -6,3 +6,10 @@
 .eyebrow { display: inline-flex; margin-bottom: .75rem; padding: .35rem .75rem; border-radius: 999px; background: rgba(255,255,255,.75); color: var(--color-primary); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
 :host ::ng-deep .page-header .vc-heading { margin: 0 0 .35rem; color: var(--color-text); font-size: 2rem; line-height: 1.2; }
 :host ::ng-deep .page-header .vc-text { margin: 0; color: var(--color-muted); }
+
+@media (max-width: 720px) {
+  .create-page { gap: 1rem; }
+  .breadcrumb { overflow-x: auto; white-space: nowrap; font-size: .78rem; }
+  .page-header { padding: 1rem; border-radius: 16px; }
+  :host ::ng-deep .page-header .vc-heading { font-size: 1.55rem; }
+}

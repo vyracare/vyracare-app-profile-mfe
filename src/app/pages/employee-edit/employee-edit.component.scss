@@ -11,5 +11,9 @@
 .message.error { background: #fff0f2; color: #a12740; }
 .loading { color: var(--color-muted); }
 @media (max-width: 720px) {
+  .edit-page { gap: 1rem; }
+  .breadcrumb { overflow-x: auto; white-space: nowrap; font-size: .78rem; }
+  .page-header { padding: 1rem; border-radius: 16px; }
+  :host ::ng-deep .page-header .vc-heading { font-size: 1.55rem; }
   .page-actions { align-items: stretch; flex-direction: column; }
 }
