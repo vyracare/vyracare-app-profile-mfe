@@ -61,9 +61,11 @@ export class EmployeeEditPageComponent implements OnInit {
         this.loading.set(false);
       },
       error: error => {
-        this.error.set(error?.status === 403
+        const message = error?.status === 403
           ? 'Somente administradores podem editar funcionarios.'
-          : 'Nao foi possivel carregar o funcionario.');
+          : 'Nao foi possivel carregar o funcionario.';
+        this.error.set(message);
+        this.toastService.error('Falha ao carregar funcionario', message);
         this.loading.set(false);
       }
     });
@@ -111,11 +113,13 @@ export class EmployeeEditPageComponent implements OnInit {
       },
       error: error => {
         this.saving.set(false);
-        this.error.set(error?.status === 409
+        const message = error?.status === 409
           ? 'O e-mail informado ja pertence a outro usuario.'
           : error?.status === 400
             ? 'Revise os dados ou o status informado.'
-            : 'Nao foi possivel atualizar o funcionario.');
+            : 'Nao foi possivel atualizar o funcionario.';
+        this.error.set(message);
+        this.toastService.error('Nao foi possivel atualizar o funcionario', message);
       }
     });
   }

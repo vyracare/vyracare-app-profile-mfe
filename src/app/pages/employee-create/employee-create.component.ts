@@ -36,7 +36,9 @@ export class EmployeeCreatePageComponent {
       },
       error: () => {
         this.loading.set(false);
+        const message = 'Tente novamente em alguns instantes.';
         this.error.set('Falha ao salvar funcionario. Tente novamente.');
+        this.toastService.error('Nao foi possivel cadastrar o funcionario', message);
       }
     });
   }

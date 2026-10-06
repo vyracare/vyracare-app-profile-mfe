@@ -48,9 +48,15 @@ export class EmployeeRegistrationPageComponent implements OnInit {
       },
       error: error => {
         this.employees.set([]);
-        this.listError.set(error?.status === 403
+        const message = error?.status === 403
           ? 'Seu perfil não possui permissão administrativa para consultar funcionários. Entre novamente se o acesso foi alterado recentemente.'
-          : 'Não foi possível carregar os funcionários.');
+          : 'Não foi possível carregar os funcionários.';
+        this.listError.set(message);
+        this.toastService.show({
+          variant: 'error',
+          title: 'Falha ao carregar funcionários',
+          message
+        });
         this.listLoading.set(false);
       }
     });
