@@ -14,4 +14,9 @@ export interface EmployeeSummary {
   email: string;
   phone: string | null;
   role: string | null;
+  department: string | null;
+  accessLevel: string | null;
+  active: boolean;
 }
+
+export type EmployeeUpdatePayload = EmployeeRegistrationPayload;

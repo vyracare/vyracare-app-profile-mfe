@@ -2,8 +2,8 @@
   <fieldset [disabled]="loading" class="form-fieldset">
     <div class="form-card">
       <div class="form-header">
-        <vc-heading [level]="2">Dados do funcionario</vc-heading>
-        <vc-text [muted]="true">Preencha os dados essenciais para liberar o acesso ao sistema.</vc-text>
+        <vc-heading [level]="2">{{ title }}</vc-heading>
+        <vc-text [muted]="true">{{ description }}</vc-text>
       </div>
 
       <div class="form-grid">
@@ -72,21 +72,17 @@
         ></vc-select>
       </div>
 
-      <div class="toggle-row">
-        <label class="switch">
-          <input type="checkbox" formControlName="active" />
-          <span class="slider"></span>
-        </label>
-        <div>
-          <strong>Status ativo</strong>
-          <p>Usuario pode acessar o sistema apos o cadastro.</p>
-        </div>
-      </div>
+      <vc-checkbox
+        id="employee-active"
+        label="Status ativo"
+        description="Usuario pode acessar o sistema e aparecer nos seletores operacionais."
+        formControlName="active"
+      ></vc-checkbox>
 
       <div class="form-actions">
-        <vc-button type="button" variant="ghost" (click)="resetForm()">Limpar</vc-button>
+        <vc-button *ngIf="showReset" type="button" variant="ghost" (click)="resetForm()">Limpar</vc-button>
         <vc-button type="submit" [loading]="loading" [disabled]="loading">
-          {{ loading ? 'Salvando...' : 'Salvar funcionario' }}
+          {{ loading ? 'Salvando...' : submitLabel }}
         </vc-button>
       </div>
 

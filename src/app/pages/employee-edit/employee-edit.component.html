@@ -1,0 +1,48 @@
+<main class="edit-page">
+  <nav class="breadcrumb">
+    <a routerLink="/dashboard">Dashboard</a><span>/</span>
+    <a routerLink="/cadastro/funcionarios">Funcionários</a><span>/</span><span>Editar funcionário</span>
+  </nav>
+
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Gestão de acessos</span>
+      <vc-heading [level]="1">{{ employee()?.fullName || 'Editar funcionário' }}</vc-heading>
+      <vc-text [muted]="true">Atualize os dados profissionais, o perfil de acesso e o status.</vc-text>
+    </div>
+  </header>
+
+  <div class="page-actions">
+    <vc-button type="button" variant="secondary" routerLink="/cadastro/funcionarios">Voltar para funcionários</vc-button>
+  </div>
+
+  <p class="message error" *ngIf="error()" role="alert">{{ error() }}</p>
+  <p class="loading" *ngIf="loading()">Carregando funcionário...</p>
+
+  <vyracare-employee-form
+    *ngIf="!loading() && initialFormValue() as formData"
+    [initialValue]="formData"
+    [loading]="saving()"
+    [error]="error()"
+    [showReset]="false"
+    title="Dados do funcionário"
+    description="A senha e os dados de credencial não são exibidos nem alterados por este formulário."
+    submitLabel="Salvar alterações"
+    (formSubmit)="requestUpdate($event)"
+  ></vyracare-employee-form>
+
+  <div class="modal-backdrop" *ngIf="confirmationOpen()" (click)="cancelUpdate()">
+    <section class="confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmation-title" (click)="$event.stopPropagation()">
+      <vc-heading id="confirmation-title" [level]="2">Confirmar alterações</vc-heading>
+      <vc-text>Deseja realmente salvar as alterações deste funcionário?</vc-text>
+      <vc-text [muted]="true">A senha atual será preservada. Mudanças no nível de acesso valerão no próximo login.</vc-text>
+      <p class="message error" *ngIf="error()" role="alert">{{ error() }}</p>
+      <div class="modal-actions">
+        <vc-button type="button" variant="secondary" [disabled]="saving()" (click)="cancelUpdate()">Cancelar</vc-button>
+        <vc-button type="button" [loading]="saving()" [disabled]="saving()" (click)="confirmUpdate()">
+          {{ saving() ? 'Salvando...' : 'Confirmar e salvar' }}
+        </vc-button>
+      </div>
+    </section>
+  </div>
+</main>

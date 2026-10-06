@@ -1,9 +1,8 @@
 <main class="employee-page">
   <nav class="breadcrumb">
-    <a routerLink="/dashboard">Dashboard</a>
-    <span>/</span>
-    <span>Funcionários</span>
+    <a routerLink="/dashboard">Dashboard</a><span>/</span><span>Funcionários</span>
   </nav>
+
   <header class="page-header">
     <div>
       <span class="eyebrow">Gestão de acessos</span>
@@ -20,6 +19,7 @@
       </div>
       <button class="primary-action" type="button" (click)="openRegistration()">Cadastrar funcionário</button>
     </div>
+
     <div class="search-row">
       <label>
         <span>Buscar funcionário</span>
@@ -28,21 +28,39 @@
       <vc-button type="button" (click)="search(searchInput.value)">Buscar</vc-button>
     </div>
 
-    <p class="message success" *ngIf="success()">Funcionário cadastrado com sucesso.</p>
     <p class="message error" *ngIf="listError()" role="alert">{{ listError() }}</p>
 
     <div class="table-wrapper">
       <table>
-        <thead><tr><th>Funcionário</th><th>Telefone</th><th>E-mail</th><th>Cargo</th><th>Status</th></tr></thead>
+        <thead>
+          <tr><th>Funcionário</th><th>Telefone</th><th>E-mail</th><th>Cargo</th><th>Status</th><th>Ações</th></tr>
+        </thead>
         <tbody>
-          <tr *ngIf="listLoading()"><td colspan="5" class="empty">Carregando funcionários...</td></tr>
-          <tr *ngIf="!listLoading() && employees().length === 0"><td colspan="5" class="empty">Nenhum funcionário encontrado.</td></tr>
+          <tr *ngIf="listLoading()"><td colspan="6" class="empty">Carregando funcionários...</td></tr>
+          <tr *ngIf="!listLoading() && employees().length === 0"><td colspan="6" class="empty">Nenhum funcionário encontrado.</td></tr>
           <tr *ngFor="let employee of employees(); trackBy: trackEmployee">
             <td><strong>{{ employee.fullName }}</strong></td>
             <td>{{ employee.phone || 'Não informado' }}</td>
             <td>{{ employee.email }}</td>
             <td>{{ employee.role || 'Não informado' }}</td>
-            <td><span class="status active">Ativo</span></td>
+            <td>
+              <span class="status" [class.active]="employee.active" [class.inactive]="!employee.active">
+                {{ employee.active ? 'Ativo' : 'Inativo' }}
+              </span>
+            </td>
+            <td class="actions-cell">
+              <vc-tooltip text="Editar funcionário" position="top">
+                <vc-icon-button icon="pencil-square" ariaLabel="Editar funcionário" variant="soft" (action)="editEmployee(employee)"></vc-icon-button>
+              </vc-tooltip>
+              <vc-tooltip [text]="employee.active ? 'Inativar funcionário' : 'Ativar funcionário'" position="top">
+                <vc-icon-button
+                  [icon]="employee.active ? 'person-x' : 'person-check'"
+                  [ariaLabel]="employee.active ? 'Inativar funcionário' : 'Ativar funcionário'"
+                  variant="soft"
+                  (action)="requestStatusChange(employee)"
+                ></vc-icon-button>
+              </vc-tooltip>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -57,6 +75,22 @@
         [error]="error()"
         (formSubmit)="handleSubmit($event)"
       ></vyracare-employee-form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="statusModalOpen()" (click)="cancelStatusChange()">
+    <section class="modal confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="status-title" (click)="$event.stopPropagation()">
+      <vc-heading id="status-title" [level]="2">{{ selectedEmployee()?.active ? 'Inativar funcionário' : 'Ativar funcionário' }}</vc-heading>
+      <vc-text>Confirma a alteração de status de {{ selectedEmployee()?.fullName }}?</vc-text>
+      <vc-text *ngIf="selectedEmployee()?.active" [muted]="true">
+        O funcionário deixará de acessar o sistema em novos logins e não aparecerá nos seletores operacionais.
+      </vc-text>
+      <div class="modal-actions">
+        <vc-button type="button" variant="secondary" [disabled]="statusLoading()" (click)="cancelStatusChange()">Cancelar</vc-button>
+        <vc-button type="button" [loading]="statusLoading()" [disabled]="statusLoading()" (click)="confirmStatusChange()">
+          {{ selectedEmployee()?.active ? 'Confirmar inativação' : 'Confirmar ativação' }}
+        </vc-button>
+      </div>
     </section>
   </div>
 </main>

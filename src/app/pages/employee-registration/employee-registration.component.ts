@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { VcButtonComponent, VcHeadingComponent, VcTextComponent } from '@vyracare/design-system';
+import { Router, RouterLink } from '@angular/router';
+import { VcButtonComponent, VcHeadingComponent, VcIconButtonComponent, VcTextComponent, VcToastService, VcTooltipComponent } from '@vyracare/design-system';
 import { EmployeeFormComponent } from '../../components/employee-form/employee-form.component';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeRegistrationPayload, EmployeeSummary } from '../../models/employee.model';
@@ -9,7 +9,7 @@ import { EmployeeRegistrationPayload, EmployeeSummary } from '../../models/emplo
 @Component({
   selector: 'vyracare-employee-registration-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, EmployeeFormComponent, VcButtonComponent, VcHeadingComponent, VcTextComponent],
+  imports: [CommonModule, RouterLink, EmployeeFormComponent, VcButtonComponent, VcHeadingComponent, VcIconButtonComponent, VcTextComponent, VcTooltipComponent],
   templateUrl: './employee-registration.component.html',
   styleUrl: './employee-registration.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,8 +23,15 @@ export class EmployeeRegistrationPageComponent implements OnInit {
   protected readonly listError = signal<string | null>(null);
   protected readonly success = signal(false);
   protected readonly registrationModalOpen = signal(false);
+  protected readonly statusModalOpen = signal(false);
+  protected readonly selectedEmployee = signal<EmployeeSummary | null>(null);
+  protected readonly statusLoading = signal(false);
 
-  constructor(private readonly employeeService: EmployeeService) {}
+  constructor(
+    private readonly employeeService: EmployeeService,
+    private readonly router: Router,
+    private readonly toastService: VcToastService
+  ) {}
 
   /** Carrega a lista inicial de funcionarios ativos. */
   ngOnInit(): void {
@@ -68,6 +75,55 @@ export class EmployeeRegistrationPageComponent implements OnInit {
     return employee.id;
   }
 
+  /** Abre a rota de edicao administrativa do funcionario selecionado. */
+  editEmployee(employee: EmployeeSummary): void {
+    void this.router.navigate(['/cadastro/funcionarios/editar', employee.id]);
+  }
+
+  /** Solicita confirmacao antes de alterar rapidamente o status do funcionario. */
+  requestStatusChange(employee: EmployeeSummary): void {
+    this.selectedEmployee.set(employee);
+    this.statusModalOpen.set(true);
+  }
+
+  /** Fecha a confirmacao de status quando nenhuma requisicao esta em andamento. */
+  cancelStatusChange(): void {
+    if (this.statusLoading()) return;
+    this.statusModalOpen.set(false);
+    this.selectedEmployee.set(null);
+  }
+
+  /** Confirma a ativacao ou inativacao e atualiza a linha retornada pela API. */
+  confirmStatusChange(): void {
+    const employee = this.selectedEmployee();
+    if (!employee) return;
+    const nextStatus = !employee.active;
+    this.statusLoading.set(true);
+
+    this.employeeService.changeEmployeeStatus(employee.id, nextStatus).subscribe({
+      next: updated => {
+        this.employees.update(employees => employees.map(item => item.id === updated.id ? updated : item));
+        this.statusLoading.set(false);
+        this.cancelStatusChange();
+        this.toastService.show({
+          variant: 'success',
+          title: nextStatus ? 'Funcionario ativado' : 'Funcionario inativado',
+          message: `${updated.fullName} foi atualizado com sucesso.`
+        });
+      },
+      error: error => {
+        this.statusLoading.set(false);
+        this.toastService.show({
+          variant: 'error',
+          title: 'Nao foi possivel alterar o status',
+          message: error?.status === 400
+            ? 'Voce nao pode inativar o proprio usuario.'
+            : 'Tente novamente em alguns instantes.'
+        });
+      }
+    });
+  }
+
   /** Persiste um funcionario, fecha o modal e recarrega a listagem em caso de sucesso. */
   handleSubmit(payload: EmployeeRegistrationPayload): void {
     this.loading.set(true);
@@ -80,6 +136,7 @@ export class EmployeeRegistrationPageComponent implements OnInit {
         this.success.set(true);
         this.registrationModalOpen.set(false);
         this.search('');
+        this.toastService.show({ variant: 'success', title: 'Funcionario cadastrado', message: 'O novo perfil foi salvo com sucesso.' });
       },
       error: () => {
         this.loading.set(false);
