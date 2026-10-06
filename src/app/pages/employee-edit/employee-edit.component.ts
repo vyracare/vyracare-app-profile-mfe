@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { VcButtonComponent, VcHeadingComponent, VcTextComponent, VcToastService } from '@vyracare/design-system';
 import { EmployeeFormComponent } from '../../components/employee-form/employee-form.component';
 import { EmployeeRegistrationPayload, EmployeeSummary, EmployeeUpdatePayload } from '../../models/employee.model';
@@ -27,7 +27,8 @@ export class EmployeeEditPageComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly employeeService: EmployeeService,
-    private readonly toastService: VcToastService
+    private readonly toastService: VcToastService,
+    private readonly router: Router
   ) {}
 
   /** Carrega o funcionario identificado na rota sem solicitar dados de credencial. */
@@ -92,6 +93,7 @@ export class EmployeeEditPageComponent implements OnInit {
           title: 'Funcionario atualizado',
           message: 'Os dados administrativos foram salvos com sucesso.'
         });
+        void this.router.navigate(['/cadastro/funcionarios']);
       },
       error: error => {
         this.saving.set(false);

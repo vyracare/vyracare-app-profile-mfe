@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { VcToastService } from '@vyracare/design-system';
 import { of, throwError } from 'rxjs';
@@ -72,6 +72,7 @@ describe('EmployeeEditPageComponent', () => {
       ...component.formValue(employee), fullName: 'Maria Atualizada'
     };
     service.updateEmployee.mockReturnValue(of({ ...employee, fullName: payload.fullName }));
+    const navigate = jest.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
 
     component.requestUpdate(payload);
     expect((component as any).confirmationOpen()).toBe(true);
@@ -81,6 +82,7 @@ describe('EmployeeEditPageComponent', () => {
     expect((component as any).employee().fullName).toBe('Maria Atualizada');
     expect((component as any).confirmationOpen()).toBe(false);
     expect(toast.show).toHaveBeenCalledWith(expect.objectContaining({ variant: 'success' }));
+    expect(navigate).toHaveBeenCalledWith(['/cadastro/funcionarios']);
   });
 
   it('should handle update conflicts and protect the modal while saving', async () => {
