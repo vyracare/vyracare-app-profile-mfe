@@ -5,7 +5,7 @@ import { VcToastService } from '@vyracare/design-system';
 import { of, throwError } from 'rxjs';
 import { EmployeeRegistrationPageComponent } from './employee-registration.component';
 import { EmployeeService } from '../../services/employee.service';
-import { EmployeeRegistrationPayload, EmployeeSummary } from '../../models/employee.model';
+import { EmployeeSummary } from '../../models/employee.model';
 
 describe('EmployeeRegistrationPageComponent', () => {
   let employeeService: jest.Mocked<EmployeeService>;
@@ -68,20 +68,6 @@ describe('EmployeeRegistrationPageComponent', () => {
     expect((component as any).employees()).toEqual([]);
     expect((component as any).listError()).toContain('permissão administrativa');
     expect((component as any).listLoading()).toBe(false);
-  });
-
-  it('should manage the registration modal without closing during a save', () => {
-    const component = TestBed.createComponent(EmployeeRegistrationPageComponent).componentInstance;
-    component.openRegistration();
-    expect((component as any).registrationModalOpen()).toBe(true);
-
-    (component as any).loading.set(true);
-    component.closeRegistration();
-    expect((component as any).registrationModalOpen()).toBe(true);
-
-    (component as any).loading.set(false);
-    component.closeRegistration();
-    expect((component as any).registrationModalOpen()).toBe(false);
   });
 
   it('should track and navigate to employee edition', () => {
@@ -149,21 +135,4 @@ describe('EmployeeRegistrationPageComponent', () => {
     expect(employeeService.changeEmployeeStatus).not.toHaveBeenCalled();
   });
 
-  it('should handle successful and failed registration', () => {
-    const component = TestBed.createComponent(EmployeeRegistrationPageComponent).componentInstance;
-    const payload: EmployeeRegistrationPayload = {
-      fullName: 'Maria Silva', email: 'maria@empresa.com', role: 'Clinico', department: 'Clinica Geral',
-      phone: '(11) 99999-9999', accessLevel: 'Administrador', active: true
-    };
-
-    employeeService.registerEmployee.mockReturnValue(of(void 0));
-    component.handleSubmit(payload);
-    expect((component as any).success()).toBe(true);
-    expect(toastService.show).toHaveBeenCalledWith(expect.objectContaining({ variant: 'success' }));
-
-    employeeService.registerEmployee.mockReturnValue(throwError(() => new Error('fail')));
-    component.handleSubmit(payload);
-    expect((component as any).error()).toContain('Falha ao salvar');
-    expect((component as any).loading()).toBe(false);
-  });
 });

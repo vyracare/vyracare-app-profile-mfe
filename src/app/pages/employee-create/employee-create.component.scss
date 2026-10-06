@@ -1,0 +1,8 @@
+:host { display: block; }
+.create-page { display: flex; flex-direction: column; gap: 2rem; width: 100%; color: var(--color-text); }
+.breadcrumb { display: flex; align-items: center; gap: .55rem; color: var(--color-muted); font-size: .9rem; }
+.breadcrumb a { color: var(--color-primary); text-decoration: none; font-weight: 600; }
+.page-header { padding: 1.5rem 1.75rem; border: 1px solid rgba(90,59,231,.12); border-radius: 20px; background: linear-gradient(135deg,rgba(90,59,231,.12),rgba(255,108,136,.12)); }
+.eyebrow { display: inline-flex; margin-bottom: .75rem; padding: .35rem .75rem; border-radius: 999px; background: rgba(255,255,255,.75); color: var(--color-primary); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+:host ::ng-deep .page-header .vc-heading { margin: 0 0 .35rem; color: var(--color-text); font-size: 2rem; line-height: 1.2; }
+:host ::ng-deep .page-header .vc-text { margin: 0; color: var(--color-muted); }

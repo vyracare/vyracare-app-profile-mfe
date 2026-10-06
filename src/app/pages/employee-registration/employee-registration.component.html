@@ -17,7 +17,7 @@
         <vc-heading [level]="2">Funcionários cadastrados</vc-heading>
         <vc-text [muted]="true">Localize um perfil por nome, telefone ou e-mail.</vc-text>
       </div>
-      <button class="primary-action" type="button" (click)="openRegistration()">Cadastrar funcionário</button>
+      <a class="primary-action" routerLink="/cadastro/funcionarios/novo">Cadastrar funcionário</a>
     </div>
 
     <div class="search-row">
@@ -66,17 +66,6 @@
       </table>
     </div>
   </section>
-
-  <div class="modal-backdrop" *ngIf="registrationModalOpen()" (click)="closeRegistration()">
-    <section class="modal" role="dialog" aria-modal="true" aria-label="Cadastrar funcionário" (click)="$event.stopPropagation()">
-      <button class="modal-close" type="button" aria-label="Fechar cadastro" (click)="closeRegistration()">×</button>
-      <vyracare-employee-form
-        [loading]="loading()"
-        [error]="error()"
-        (formSubmit)="handleSubmit($event)"
-      ></vyracare-employee-form>
-    </section>
-  </div>
 
   <div class="modal-backdrop" *ngIf="statusModalOpen()" (click)="cancelStatusChange()">
     <section class="modal confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="status-title" (click)="$event.stopPropagation()">

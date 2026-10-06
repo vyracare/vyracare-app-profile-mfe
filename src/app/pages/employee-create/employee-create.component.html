@@ -1,0 +1,21 @@
+<main class="create-page">
+  <nav class="breadcrumb">
+    <a routerLink="/dashboard">Dashboard</a><span>/</span>
+    <a routerLink="/cadastro/funcionarios">Funcionários</a><span>/</span><span>Cadastrar</span>
+  </nav>
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Equipe e acessos</span>
+      <vc-heading [level]="1">Cadastro de funcionário</vc-heading>
+      <vc-text [muted]="true">Registre um novo perfil com as permissões adequadas para acessar o sistema.</vc-text>
+    </div>
+  </header>
+  <vyracare-employee-form
+    [loading]="loading()"
+    [error]="error()"
+    title="Dados do funcionário"
+    description="Preencha os dados profissionais e defina o perfil de acesso."
+    submitLabel="Cadastrar funcionário"
+    (formSubmit)="handleSubmit($event)"
+  ></vyracare-employee-form>
+</main>
