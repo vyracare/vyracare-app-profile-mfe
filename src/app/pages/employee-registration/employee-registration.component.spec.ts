@@ -59,6 +59,17 @@ describe('EmployeeRegistrationPageComponent', () => {
     expect((component as any).listLoading()).toBe(false);
   });
 
+  it('should explain forbidden employee management access', () => {
+    const component = TestBed.createComponent(EmployeeRegistrationPageComponent).componentInstance;
+    employeeService.listEmployees.mockReturnValue(throwError(() => ({ status: 403 })));
+
+    component.search('');
+
+    expect((component as any).employees()).toEqual([]);
+    expect((component as any).listError()).toContain('permissão administrativa');
+    expect((component as any).listLoading()).toBe(false);
+  });
+
   it('should manage the registration modal without closing during a save', () => {
     const component = TestBed.createComponent(EmployeeRegistrationPageComponent).componentInstance;
     component.openRegistration();

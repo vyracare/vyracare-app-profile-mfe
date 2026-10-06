@@ -48,9 +48,11 @@ export class EmployeeRegistrationPageComponent implements OnInit {
         this.employees.set(employees);
         this.listLoading.set(false);
       },
-      error: () => {
+      error: error => {
         this.employees.set([]);
-        this.listError.set('Não foi possível carregar os funcionários.');
+        this.listError.set(error?.status === 403
+          ? 'Seu perfil não possui permissão administrativa para consultar funcionários. Entre novamente se o acesso foi alterado recentemente.'
+          : 'Não foi possível carregar os funcionários.');
         this.listLoading.set(false);
       }
     });
