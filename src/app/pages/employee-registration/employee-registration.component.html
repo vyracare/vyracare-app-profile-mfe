@@ -60,6 +60,9 @@
                   (action)="requestStatusChange(employee)"
                 ></vc-icon-button>
               </vc-tooltip>
+              <vc-tooltip text="Excluir funcionário" position="top">
+                <vc-icon-button icon="trash" ariaLabel="Excluir funcionário" variant="soft" (action)="requestDelete(employee)"></vc-icon-button>
+              </vc-tooltip>
             </td>
           </tr>
         </tbody>
@@ -78,6 +81,22 @@
         <vc-button type="button" variant="secondary" [disabled]="statusLoading()" (click)="cancelStatusChange()">Cancelar</vc-button>
         <vc-button type="button" [loading]="statusLoading()" [disabled]="statusLoading()" (click)="confirmStatusChange()">
           {{ selectedEmployee()?.active ? 'Confirmar inativação' : 'Confirmar ativação' }}
+        </vc-button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="deleteModalOpen()" (click)="cancelDelete()">
+    <section class="modal confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="delete-title" (click)="$event.stopPropagation()">
+      <vc-heading id="delete-title" [level]="2">Excluir funcionário</vc-heading>
+      <vc-text>Confirma a exclusão de {{ employeeToDelete()?.fullName }}?</vc-text>
+      <vc-text [muted]="true">
+        Esta ação é permanente e removerá o cadastro e a credencial de acesso do funcionário.
+      </vc-text>
+      <div class="modal-actions">
+        <vc-button type="button" variant="secondary" [disabled]="deleteLoading()" (click)="cancelDelete()">Cancelar</vc-button>
+        <vc-button type="button" [loading]="deleteLoading()" [disabled]="deleteLoading()" (click)="confirmDelete()">
+          Confirmar exclusão
         </vc-button>
       </div>
     </section>

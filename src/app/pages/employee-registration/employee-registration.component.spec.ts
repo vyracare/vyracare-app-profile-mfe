@@ -21,7 +21,8 @@ describe('EmployeeRegistrationPageComponent', () => {
       listEmployees: jest.fn().mockReturnValue(of([])),
       getEmployee: jest.fn(),
       updateEmployee: jest.fn(),
-      changeEmployeeStatus: jest.fn()
+      changeEmployeeStatus: jest.fn(),
+      deleteEmployee: jest.fn()
     } as unknown as jest.Mocked<EmployeeService>;
     toastService = { show: jest.fn() };
 
@@ -133,6 +134,43 @@ describe('EmployeeRegistrationPageComponent', () => {
     const component = TestBed.createComponent(EmployeeRegistrationPageComponent).componentInstance;
     component.confirmStatusChange();
     expect(employeeService.changeEmployeeStatus).not.toHaveBeenCalled();
+  });
+
+  it('should confirm employee deletion and remove the row', () => {
+    const component = TestBed.createComponent(EmployeeRegistrationPageComponent).componentInstance;
+    (component as any).employees.set([employee]);
+    employeeService.deleteEmployee.mockReturnValue(of(void 0));
+
+    component.requestDelete(employee);
+    component.confirmDelete();
+
+    expect(employeeService.deleteEmployee).toHaveBeenCalledWith('1');
+    expect((component as any).employees()).toEqual([]);
+    expect((component as any).deleteModalOpen()).toBe(false);
+    expect(toastService.show).toHaveBeenCalledWith(expect.objectContaining({ variant: 'success' }));
+  });
+
+  it('should keep the delete confirmation open while saving and report self-deletion', () => {
+    const component = TestBed.createComponent(EmployeeRegistrationPageComponent).componentInstance;
+    component.requestDelete(employee);
+    (component as any).deleteLoading.set(true);
+    component.cancelDelete();
+    expect((component as any).deleteModalOpen()).toBe(true);
+
+    (component as any).deleteLoading.set(false);
+    employeeService.deleteEmployee.mockReturnValue(throwError(() => ({ status: 400 })));
+    component.confirmDelete();
+
+    expect(toastService.show).toHaveBeenCalledWith(expect.objectContaining({
+      message: 'Você não pode excluir o próprio usuário.'
+    }));
+    expect((component as any).deleteLoading()).toBe(false);
+  });
+
+  it('should ignore deletion confirmation without a selected employee', () => {
+    const component = TestBed.createComponent(EmployeeRegistrationPageComponent).componentInstance;
+    component.confirmDelete();
+    expect(employeeService.deleteEmployee).not.toHaveBeenCalled();
   });
 
 });

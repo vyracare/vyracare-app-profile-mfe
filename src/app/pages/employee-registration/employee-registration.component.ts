@@ -21,6 +21,9 @@ export class EmployeeRegistrationPageComponent implements OnInit {
   protected readonly statusModalOpen = signal(false);
   protected readonly selectedEmployee = signal<EmployeeSummary | null>(null);
   protected readonly statusLoading = signal(false);
+  protected readonly deleteModalOpen = signal(false);
+  protected readonly employeeToDelete = signal<EmployeeSummary | null>(null);
+  protected readonly deleteLoading = signal(false);
 
   constructor(
     private readonly employeeService: EmployeeService,
@@ -101,6 +104,49 @@ export class EmployeeRegistrationPageComponent implements OnInit {
           title: 'Nao foi possivel alterar o status',
           message: error?.status === 400
             ? 'Voce nao pode inativar o proprio usuario.'
+            : 'Tente novamente em alguns instantes.'
+        });
+      }
+    });
+  }
+
+  /** Solicita confirmação antes de excluir definitivamente o funcionário. */
+  requestDelete(employee: EmployeeSummary): void {
+    this.employeeToDelete.set(employee);
+    this.deleteModalOpen.set(true);
+  }
+
+  /** Fecha a confirmação de exclusão quando nenhuma requisição está em andamento. */
+  cancelDelete(): void {
+    if (this.deleteLoading()) return;
+    this.deleteModalOpen.set(false);
+    this.employeeToDelete.set(null);
+  }
+
+  /** Exclui o funcionário confirmado e remove sua linha da tabela. */
+  confirmDelete(): void {
+    const employee = this.employeeToDelete();
+    if (!employee) return;
+    this.deleteLoading.set(true);
+
+    this.employeeService.deleteEmployee(employee.id).subscribe({
+      next: () => {
+        this.employees.update(employees => employees.filter(item => item.id !== employee.id));
+        this.deleteLoading.set(false);
+        this.cancelDelete();
+        this.toastService.show({
+          variant: 'success',
+          title: 'Funcionário excluído',
+          message: `${employee.fullName} foi removido definitivamente.`
+        });
+      },
+      error: error => {
+        this.deleteLoading.set(false);
+        this.toastService.show({
+          variant: 'error',
+          title: 'Não foi possível excluir o funcionário',
+          message: error?.status === 400
+            ? 'Você não pode excluir o próprio usuário.'
             : 'Tente novamente em alguns instantes.'
         });
       }

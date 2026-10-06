@@ -84,7 +84,7 @@ describe('EmployeeService', () => {
     req.flush(null);
   });
 
-  it('should get, update and change employee status through administrative endpoints', () => {
+  it('should get, update, change status and delete through administrative endpoints', () => {
     const employee: EmployeeSummary = {
       id: 'employee-1', fullName: 'Maria Silva', email: 'maria@empresa.com', phone: null,
       role: 'Clinico', department: null, accessLevel: 'Gestor', active: true
@@ -109,5 +109,10 @@ describe('EmployeeService', () => {
     expect(patchRequest.request.method).toBe('PATCH');
     expect(patchRequest.request.body).toEqual({ active: false });
     patchRequest.flush({ ...employee, active: false });
+
+    service.deleteEmployee(employee.id).subscribe();
+    const deleteRequest = httpMock.expectOne(`${environment.apiUrl}/employees/${employee.id}`);
+    expect(deleteRequest.request.method).toBe('DELETE');
+    deleteRequest.flush(null);
   });
 });

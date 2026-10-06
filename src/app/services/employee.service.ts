@@ -44,4 +44,9 @@ export class EmployeeService {
   changeEmployeeStatus(id: string, active: boolean): Observable<EmployeeSummary> {
     return this.http.patch<EmployeeSummary>(`${this.apiUrl}/employees/${id}/status`, { active });
   }
+
+  /** Exclui definitivamente um funcionário pela rota administrativa protegida. */
+  deleteEmployee(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/employees/${id}`);
+  }
 }
