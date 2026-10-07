@@ -41,7 +41,17 @@ th { color: var(--color-muted); font-size: .76rem; text-transform: uppercase; le
   :host ::ng-deep .page-header .vc-heading { font-size: 1.55rem; }
   .eyebrow { margin-bottom: .55rem; font-size: .67rem; }
   .table-card { padding: 1rem; border-radius: 16px; }
-  .page-header, .table-toolbar, .modal-actions { align-items: stretch; flex-direction: column; }
+  .page-header, .table-toolbar { align-items: stretch; flex-direction: column; }
+  .modal-actions { align-items: center; flex-direction: row; justify-content: space-between; }
+  :host ::ng-deep .modal-actions vc-button { min-width: 0; }
+  :host ::ng-deep .modal-actions vc-button .vc-button__inner {
+    max-width: 100%;
+    min-height: 2.75rem;
+    padding-inline: .75rem;
+    font-size: .875rem;
+    line-height: 1.2;
+    white-space: normal;
+  }
   .search-row { align-items: end; flex-direction: row; }
   .search-row label { min-width: 0; }
   .primary-action { min-height: 44px; box-sizing: border-box; text-align: center; }
