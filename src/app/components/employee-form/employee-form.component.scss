@@ -235,6 +235,8 @@ vc-checkbox {
 
   .form-grid { grid-template-columns: 1fr; gap: 1rem; }
   .form-field input, .form-field select { min-height: 44px; font-size: 1rem; }
+  :host ::ng-deep vc-select .vc-select__trigger { min-height: 3.5rem; }
+  :host ::ng-deep vc-select .vc-select__options button { min-height: 3.25rem; padding-block: .875rem; }
   .toggle-row { align-items: flex-start; }
 
   .form-actions {
