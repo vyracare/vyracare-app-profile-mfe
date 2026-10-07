@@ -15,7 +15,6 @@
 .search-row { display: flex; align-items: end; gap: .75rem; margin-bottom: 1.25rem; }
 .search-row label { display: grid; gap: .45rem; flex: 1; font-size: .9rem; font-weight: 600; }
 .search-row input { width: 100%; border: 1px solid rgba(90,59,231,.2); border-radius: 12px; padding: .8rem .9rem; font: inherit; }
-:host ::ng-deep .search-row .vc-icon-button--solid { color: #fff; }
 .table-wrapper { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; min-width: 760px; }
 th, td { padding: .9rem .7rem; text-align: left; border-bottom: 1px solid #ececf5; }
