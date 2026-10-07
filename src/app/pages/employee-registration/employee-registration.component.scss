@@ -12,9 +12,7 @@
 .table-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
 :host ::ng-deep .table-toolbar .vc-heading { margin: 0 0 .25rem; }
 :host ::ng-deep .table-toolbar .vc-text { margin: 0; }
-.search-row { display: flex; align-items: end; gap: .75rem; margin-bottom: 1.25rem; }
-.search-row label { display: grid; gap: .45rem; flex: 1; font-size: .9rem; font-weight: 600; }
-.search-row input { width: 100%; border: 1px solid rgba(90,59,231,.2); border-radius: 12px; padding: .8rem .9rem; font: inherit; }
+.search-row { display: block; margin-bottom: 1.25rem; }
 .table-wrapper { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; min-width: 760px; }
 th, td { padding: .9rem .7rem; text-align: left; border-bottom: 1px solid #ececf5; }
@@ -52,8 +50,6 @@ th { color: var(--color-muted); font-size: .76rem; text-transform: uppercase; le
     line-height: 1.2;
     white-space: normal;
   }
-  .search-row { align-items: end; flex-direction: row; }
-  .search-row label { min-width: 0; }
   .primary-action { min-height: 44px; box-sizing: border-box; text-align: center; }
   .table-wrapper { overflow: visible; }
   table, tbody { display: block; width: 100%; min-width: 0; }
