@@ -25,7 +25,9 @@
         <span>Buscar funcionário</span>
         <input #searchInput type="search" placeholder="Nome, telefone ou email" (keyup.enter)="search(searchInput.value)" />
       </label>
-      <vc-button type="button" (click)="search(searchInput.value)">Buscar</vc-button>
+      <vc-tooltip text="Buscar funcionário" position="top">
+        <vc-icon-button icon="search" ariaLabel="Buscar funcionário" variant="solid" size="lg" (action)="search(searchInput.value)"></vc-icon-button>
+      </vc-tooltip>
     </div>
 
     <p class="message error" *ngIf="listError()" role="alert">{{ listError() }}</p>

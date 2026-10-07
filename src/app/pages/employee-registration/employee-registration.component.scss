@@ -41,7 +41,9 @@ th { color: var(--color-muted); font-size: .76rem; text-transform: uppercase; le
   :host ::ng-deep .page-header .vc-heading { font-size: 1.55rem; }
   .eyebrow { margin-bottom: .55rem; font-size: .67rem; }
   .table-card { padding: 1rem; border-radius: 16px; }
-  .page-header, .table-toolbar, .search-row, .modal-actions { align-items: stretch; flex-direction: column; }
+  .page-header, .table-toolbar, .modal-actions { align-items: stretch; flex-direction: column; }
+  .search-row { align-items: end; flex-direction: row; }
+  .search-row label { min-width: 0; }
   .primary-action { min-height: 44px; box-sizing: border-box; text-align: center; }
   .table-wrapper { overflow: visible; }
   table, tbody { display: block; width: 100%; min-width: 0; }
