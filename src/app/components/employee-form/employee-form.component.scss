@@ -185,39 +185,6 @@ vc-checkbox {
   color: var(--color-primary);
 }
 
-.ghost,
-.primary {
-  border: none;
-  border-radius: 999px;
-  padding: 0.65rem 1.4rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.ghost {
-  background: #f4f1ff;
-  color: var(--color-primary);
-}
-
-.primary {
-  background: linear-gradient(135deg, #6e4ef5, #5ac4ff);
-  color: #fff;
-  box-shadow: 0 10px 20px rgba(90, 59, 231, 0.25);
-}
-
-.ghost:hover,
-.primary:hover {
-  transform: translateY(-1px);
-}
-
-.primary:disabled {
-  cursor: default;
-  opacity: 0.7;
-  box-shadow: none;
-  transform: none;
-}
-
 .error-banner {
   margin: 1rem 0 0;
   padding: 0.75rem 1rem;
@@ -246,6 +213,7 @@ vc-checkbox {
   }
 
   :host ::ng-deep .form-actions vc-button { min-width: 0; }
+  :host ::ng-deep .form-actions vc-button:last-child { margin-left: auto; }
   :host ::ng-deep .form-actions vc-button .vc-button__inner {
     min-height: 2.75rem;
     padding-inline: .85rem;
