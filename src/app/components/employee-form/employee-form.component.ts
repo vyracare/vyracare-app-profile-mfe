@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   VcButtonComponent,
+  VcCheckboxComponent,
   VcHeadingComponent,
   VcInputComponent,
   VcSelectComponent,
@@ -18,6 +19,7 @@ import { EmployeeRegistrationPayload } from '../../models/employee.model';
     CommonModule,
     ReactiveFormsModule,
     VcButtonComponent,
+    VcCheckboxComponent,
     VcHeadingComponent,
     VcInputComponent,
     VcSelectComponent,
@@ -27,9 +29,15 @@ import { EmployeeRegistrationPayload } from '../../models/employee.model';
   styleUrl: './employee-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EmployeeFormComponent {
+/** Mantem os campos, validacoes e eventos do cadastro de funcionario. */
+export class EmployeeFormComponent implements OnChanges {
   @Input() loading = false;
   @Input() error: string | null = null;
+  @Input() initialValue: EmployeeRegistrationPayload | null = null;
+  @Input() title = 'Dados do funcionario';
+  @Input() description = 'Preencha os dados essenciais para liberar o acesso ao sistema.';
+  @Input() submitLabel = 'Salvar funcionario';
+  @Input() showReset = true;
   @Output() formSubmit = new EventEmitter<EmployeeRegistrationPayload>();
 
   readonly roles = ['Clinico', 'Administrativo', 'Financeiro', 'Recepcao', 'Suporte'];
@@ -70,7 +78,15 @@ export class EmployeeFormComponent {
     });
   }
 
-  onSubmit() {
+  /** Sincroniza o formulario quando os dados do funcionario chegam da API. */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['initialValue'] && this.initialValue) {
+      this.form.reset(this.initialValue);
+    }
+  }
+
+  /** Marca campos invalidos ou emite um cadastro completo para a pagina consumidora. */
+  onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -79,8 +95,9 @@ export class EmployeeFormComponent {
     this.formSubmit.emit(this.form.getRawValue());
   }
 
-  resetForm() {
-    this.form.reset({
+  /** Restaura os valores padrao de um novo funcionario. */
+  resetForm(): void {
+    this.form.reset(this.initialValue ?? {
       fullName: '',
       email: '',
       role: '',

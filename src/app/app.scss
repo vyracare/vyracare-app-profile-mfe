@@ -11,3 +11,7 @@
     padding: 1.5rem;
   }
 }
+
+@media (max-width: 720px) {
+  .user-shell { min-height: auto; padding: 0; }
+}

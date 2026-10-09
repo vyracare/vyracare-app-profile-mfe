@@ -75,4 +75,20 @@ describe('EmployeeFormComponent', () => {
       active: true
     });
   });
+
+  it('should apply and restore the initial value in edit mode', () => {
+    const fixture = TestBed.createComponent(EmployeeFormComponent);
+    const component = fixture.componentInstance;
+    const initialValue: EmployeeRegistrationPayload = {
+      fullName: 'Maria Silva', email: 'maria@empresa.com', role: 'Clinico', department: 'Clinica',
+      phone: '(11) 99999-9999', accessLevel: 'Gestor', active: false
+    };
+    component.initialValue = initialValue;
+    component.ngOnChanges({ initialValue: { currentValue: initialValue, previousValue: null, firstChange: true, isFirstChange: () => true } });
+    component.form.controls.fullName.setValue('Alterado');
+
+    component.resetForm();
+
+    expect(component.form.getRawValue()).toEqual(initialValue);
+  });
 });

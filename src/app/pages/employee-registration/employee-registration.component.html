@@ -1,51 +1,98 @@
-<section class="employee-page">
+<main class="employee-page">
   <nav class="breadcrumb">
-    <a routerLink="/dashboard">Dashboard</a>
-    <span>/</span>
-    <span>Cadastro de funcionarios</span>
+    <a routerLink="/dashboard">Dashboard</a><span>/</span><span>Funcionários</span>
   </nav>
+
   <header class="page-header">
     <div>
-      <span class="eyebrow">Equipe e acessos</span>
-      <vc-heading [level]="1">Cadastro de funcionarios</vc-heading>
-      <vc-text [muted]="true">Registre novos perfis para acessar o sistema com permissoes adequadas.</vc-text>
-    </div>
-    <div class="header-tag">
-      <span>Fluxo seguro</span>
-      <strong>Dados protegidos</strong>
+      <span class="eyebrow">Gestão de acessos</span>
+      <vc-heading [level]="1">Funcionários</vc-heading>
+      <vc-text [muted]="true">Consulte a equipe e mantenha os perfis de acesso organizados.</vc-text>
     </div>
   </header>
 
-  <div class="page-content">
-    <vyracare-employee-form
-      [loading]="loading()"
-      [error]="error()"
-      (formSubmit)="handleSubmit($event)"
-    ></vyracare-employee-form>
-
-    <aside class="page-side">
-      <vc-card class="side-card" title="Padroes recomendados">
-        <ul>
-          <li>Defina um cargo claro para cada area.</li>
-          <li>Utilize e-mail corporativo para autenticar.</li>
-          <li>Mantenha o status ativo apenas quando necessario.</li>
-        </ul>
-      </vc-card>
-      <vc-card class="side-card accent" title="Proximos passos">
-        <ul>
-          <li>Envie o convite por e-mail ao salvar.</li>
-          <li>Compartilhe os acessos do painel inicial.</li>
-          <li>Revise permissoes periodicamente.</li>
-        </ul>
-      </vc-card>
-    </aside>
-  </div>
-
-  <div class="success-card" *ngIf="success()">
-    <span class="badge">Concluido</span>
-    <div>
-      <strong>Cadastro finalizado</strong>
-      <p>O funcionario foi registrado e ja pode receber as credenciais.</p>
+  <section class="table-card">
+    <div class="table-toolbar">
+      <div>
+        <vc-heading [level]="2">Funcionários cadastrados</vc-heading>
+        <vc-text [muted]="true">Localize um perfil por nome, telefone ou e-mail.</vc-text>
+      </div>
+      <a class="primary-action" routerLink="/cadastro/funcionarios/novo">Cadastrar funcionário</a>
     </div>
+
+    <vc-search class="search-row" id="employee-search" label="Buscar funcionário" placeholder="Nome, telefone ou email" [action]="true" actionLabel="Buscar funcionário" (search)="search($event)"></vc-search>
+
+    <p class="message error" *ngIf="listError()" role="alert">{{ listError() }}</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>Funcionário</th><th>Telefone</th><th>E-mail</th><th>Cargo</th><th>Status</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="listLoading()"><td colspan="6" class="empty">Carregando funcionários...</td></tr>
+          <tr *ngIf="!listLoading() && employees().length === 0"><td colspan="6" class="empty">Nenhum funcionário encontrado.</td></tr>
+          <tr *ngFor="let employee of employees(); trackBy: trackEmployee">
+            <td data-label="Funcionário"><strong>{{ employee.fullName }}</strong></td>
+            <td>{{ employee.phone || 'Não informado' }}</td>
+            <td data-label="E-mail">{{ employee.email }}</td>
+            <td>{{ employee.role || 'Não informado' }}</td>
+            <td>
+              <span class="status" [class.active]="employee.active" [class.inactive]="!employee.active">
+                {{ employee.active ? 'Ativo' : 'Inativo' }}
+              </span>
+            </td>
+            <td class="actions-cell" data-label="Ações">
+              <vc-tooltip text="Editar funcionário" position="top">
+                <vc-icon-button icon="pencil-square" ariaLabel="Editar funcionário" variant="soft" (action)="editEmployee(employee)"></vc-icon-button>
+              </vc-tooltip>
+              <vc-tooltip [text]="employee.active ? 'Inativar funcionário' : 'Ativar funcionário'" position="top">
+                <vc-icon-button
+                  [icon]="employee.active ? 'person-x' : 'person-check'"
+                  [ariaLabel]="employee.active ? 'Inativar funcionário' : 'Ativar funcionário'"
+                  variant="soft"
+                  (action)="requestStatusChange(employee)"
+                ></vc-icon-button>
+              </vc-tooltip>
+              <vc-tooltip text="Excluir funcionário" position="top">
+                <vc-icon-button icon="trash" ariaLabel="Excluir funcionário" variant="soft" (action)="requestDelete(employee)"></vc-icon-button>
+              </vc-tooltip>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="modal-backdrop" *ngIf="statusModalOpen()" (click)="cancelStatusChange()">
+    <section class="modal confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="status-title" (click)="$event.stopPropagation()">
+      <vc-heading id="status-title" [level]="2">{{ selectedEmployee()?.active ? 'Inativar funcionário' : 'Ativar funcionário' }}</vc-heading>
+      <vc-text>Confirma a alteração de status de {{ selectedEmployee()?.fullName }}?</vc-text>
+      <vc-text *ngIf="selectedEmployee()?.active" [muted]="true">
+        O funcionário deixará de acessar o sistema em novos logins e não aparecerá nos seletores operacionais.
+      </vc-text>
+      <div class="modal-actions">
+        <vc-button type="button" variant="secondary" [disabled]="statusLoading()" (click)="cancelStatusChange()">Cancelar</vc-button>
+        <vc-button type="button" [loading]="statusLoading()" [disabled]="statusLoading()" (click)="confirmStatusChange()">
+          {{ selectedEmployee()?.active ? 'Confirmar inativação' : 'Confirmar ativação' }}
+        </vc-button>
+      </div>
+    </section>
   </div>
-</section>
+
+  <div class="modal-backdrop" *ngIf="deleteModalOpen()" (click)="cancelDelete()">
+    <section class="modal confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="delete-title" (click)="$event.stopPropagation()">
+      <vc-heading id="delete-title" [level]="2">Excluir funcionário</vc-heading>
+      <vc-text>Confirma a exclusão de {{ employeeToDelete()?.fullName }}?</vc-text>
+      <vc-text [muted]="true">
+        Esta ação é permanente e removerá o cadastro e a credencial de acesso do funcionário.
+      </vc-text>
+      <div class="modal-actions">
+        <vc-button type="button" variant="secondary" [disabled]="deleteLoading()" (click)="cancelDelete()">Cancelar</vc-button>
+        <vc-button type="button" [loading]="deleteLoading()" [disabled]="deleteLoading()" (click)="confirmDelete()">
+          Confirmar exclusão
+        </vc-button>
+      </div>
+    </section>
+  </div>
+</main>

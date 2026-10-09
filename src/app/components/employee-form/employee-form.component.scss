@@ -52,6 +52,11 @@
   gap: 1.25rem;
 }
 
+vc-checkbox {
+  display: block;
+  margin-top: 1.5rem;
+}
+
 .form-field {
   display: flex;
   flex-direction: column;
@@ -180,39 +185,6 @@
   color: var(--color-primary);
 }
 
-.ghost,
-.primary {
-  border: none;
-  border-radius: 999px;
-  padding: 0.65rem 1.4rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.ghost {
-  background: #f4f1ff;
-  color: var(--color-primary);
-}
-
-.primary {
-  background: linear-gradient(135deg, #6e4ef5, #5ac4ff);
-  color: #fff;
-  box-shadow: 0 10px 20px rgba(90, 59, 231, 0.25);
-}
-
-.ghost:hover,
-.primary:hover {
-  transform: translateY(-1px);
-}
-
-.primary:disabled {
-  cursor: default;
-  opacity: 0.7;
-  box-shadow: none;
-  transform: none;
-}
-
 .error-banner {
   margin: 1rem 0 0;
   padding: 0.75rem 1rem;
@@ -224,11 +196,29 @@
 
 @media (max-width: 720px) {
   .form-card {
-    padding: 1.5rem;
+    padding: 1rem;
+    border-radius: 16px;
   }
 
+  .form-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .form-field input, .form-field select { min-height: 44px; font-size: 1rem; }
+  :host ::ng-deep vc-select .vc-select__trigger { min-height: 3.5rem; }
+  :host ::ng-deep vc-select .vc-select__options button { min-height: 3.25rem; padding-block: .875rem; }
+  .toggle-row { align-items: flex-start; }
+
   .form-actions {
-    flex-direction: column;
-    align-items: stretch;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  :host ::ng-deep .form-actions vc-button { min-width: 0; }
+  :host ::ng-deep .form-actions vc-button:last-child { margin-left: auto; }
+  :host ::ng-deep .form-actions vc-button .vc-button__inner {
+    min-height: 2.75rem;
+    padding-inline: .85rem;
+    font-size: .875rem;
+    line-height: 1.2;
+    white-space: normal;
   }
 }

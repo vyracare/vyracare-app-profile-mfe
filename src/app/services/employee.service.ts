@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environments';
-import { EmployeeRegistrationPayload } from '../models/employee.model';
+import { EmployeeRegistrationPayload, EmployeeSummary, EmployeeUpdatePayload } from '../models/employee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,40 @@ export class EmployeeService {
 
   constructor(private readonly http: HttpClient) {}
 
+  /** Lista funcionarios ativos e inativos para a gestao administrativa. */
+  listEmployees(search = ''): Observable<EmployeeSummary[]> {
+    let params = new HttpParams().set('limit', 100);
+    const normalizedSearch = search.trim();
+
+    if (normalizedSearch) {
+      params = params.set('search', normalizedSearch);
+    }
+
+    return this.http.get<EmployeeSummary[]>(`${this.apiUrl}/employees/manage`, { params });
+  }
+
+  /** Cadastra um funcionario pela rota protegida de administracao. */
   registerEmployee(payload: EmployeeRegistrationPayload): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/register`, payload);
+    return this.http.post<void>(`${this.apiUrl}/employees`, payload);
+  }
+
+  /** Recupera a projecao administrativa de um funcionario sem dados de credencial. */
+  getEmployee(id: string): Observable<EmployeeSummary> {
+    return this.http.get<EmployeeSummary>(`${this.apiUrl}/employees/${id}`);
+  }
+
+  /** Atualiza os dados administrativos sem enviar ou substituir a senha. */
+  updateEmployee(id: string, payload: EmployeeUpdatePayload): Observable<EmployeeSummary> {
+    return this.http.put<EmployeeSummary>(`${this.apiUrl}/employees/${id}`, payload);
+  }
+
+  /** Ativa ou inativa rapidamente um funcionario. */
+  changeEmployeeStatus(id: string, active: boolean): Observable<EmployeeSummary> {
+    return this.http.patch<EmployeeSummary>(`${this.apiUrl}/employees/${id}/status`, { active });
+  }
+
+  /** Exclui definitivamente um funcionário pela rota administrativa protegida. */
+  deleteEmployee(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/employees/${id}`);
   }
 }
