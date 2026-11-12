@@ -16,39 +16,47 @@
     <vc-button type="button" variant="secondary" routerLink="/cadastro/funcionarios">Voltar para funcionários</vc-button>
   </div>
 
-  <p class="message error" *ngIf="error()" role="alert">{{ error() }}</p>
-  <p class="loading" *ngIf="loading()">Carregando funcionário...</p>
+  @if (error()) {
+    <p class="message error" role="alert">{{ error() }}</p>
+  }
+  @if (loading()) {
+    <p class="loading">Carregando funcionário...</p>
+  }
 
-  <vyracare-employee-form
-    *ngIf="!loading() && initialFormValue() as formData"
-    [initialValue]="formData"
-    [loading]="saving()"
-    [error]="error()"
-    [showReset]="false"
-    title="Dados do funcionário"
-    description="A senha e os dados de credencial não são exibidos nem alterados por este formulário."
-    submitLabel="Salvar alterações"
-    (formSubmit)="requestUpdate($event)"
-  ></vyracare-employee-form>
+  @if (!loading() && initialFormValue(); as formData) {
+    <vyracare-employee-form
+      [initialValue]="formData"
+      [loading]="saving()"
+      [error]="error()"
+      [showReset]="false"
+      title="Dados do funcionário"
+      description="A senha e os dados de credencial não são exibidos nem alterados por este formulário."
+      submitLabel="Salvar alterações"
+      (formSubmit)="requestUpdate($event)"
+    ></vyracare-employee-form>
+  }
 
-  <vc-modal
-    *ngIf="confirmationOpen()"
-    role="alertdialog"
-    labelledBy="confirmation-title"
-    describedBy="confirmation-description"
-    [closeOnBackdrop]="!saving()"
-    [closeOnEscape]="!saving()"
-    (dismissed)="cancelUpdate()"
-  >
-    <vc-heading vcModalHeader id="confirmation-title" [level]="2">Confirmar alterações</vc-heading>
-    <div vcModalBody id="confirmation-description">
-      <vc-text>Deseja realmente salvar as alterações deste funcionário?</vc-text>
-      <vc-text [muted]="true">A senha atual será preservada. Mudanças no nível de acesso valerão no próximo login.</vc-text>
-      <p class="message error" *ngIf="error()" role="alert">{{ error() }}</p>
-    </div>
-    <vc-button vcModalFooter type="button" variant="secondary" [disabled]="saving()" (click)="cancelUpdate()">Cancelar</vc-button>
-    <vc-button vcModalFooter type="button" [loading]="saving()" [disabled]="saving()" (click)="confirmUpdate()">
-      {{ saving() ? 'Salvando...' : 'Confirmar e salvar' }}
-    </vc-button>
-  </vc-modal>
+  @if (confirmationOpen()) {
+    <vc-modal
+      role="alertdialog"
+      labelledBy="confirmation-title"
+      describedBy="confirmation-description"
+      [closeOnBackdrop]="!saving()"
+      [closeOnEscape]="!saving()"
+      (dismissed)="cancelUpdate()"
+      >
+      <vc-heading vcModalHeader id="confirmation-title" [level]="2">Confirmar alterações</vc-heading>
+      <div vcModalBody id="confirmation-description">
+        <vc-text>Deseja realmente salvar as alterações deste funcionário?</vc-text>
+        <vc-text [muted]="true">A senha atual será preservada. Mudanças no nível de acesso valerão no próximo login.</vc-text>
+        @if (error()) {
+          <p class="message error" role="alert">{{ error() }}</p>
+        }
+      </div>
+      <vc-button vcModalFooter type="button" variant="secondary" [disabled]="saving()" (click)="cancelUpdate()">Cancelar</vc-button>
+      <vc-button vcModalFooter type="button" [loading]="saving()" [disabled]="saving()" (click)="confirmUpdate()">
+        {{ saving() ? 'Salvando...' : 'Confirmar e salvar' }}
+      </vc-button>
+    </vc-modal>
+  }
 </main>

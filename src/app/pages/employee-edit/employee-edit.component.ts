@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
@@ -16,14 +16,13 @@ import { EmployeeService } from '../../services/employee.service';
   selector: 'vyracare-employee-edit-page',
   standalone: true,
   imports: [
-    CommonModule,
     RouterLink,
     EmployeeFormComponent,
     VcButtonComponent,
     VcHeadingComponent,
     VcModalComponent,
     VcTextComponent
-  ],
+],
   templateUrl: './employee-edit.component.html',
   styleUrl: './employee-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

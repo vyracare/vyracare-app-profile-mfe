@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterLink } from '@angular/router';
 import { VcButtonComponent, VcHeadingComponent, VcIconButtonComponent, VcSearchComponent, VcTextComponent, VcToastService, VcTooltipComponent } from '@vyracare/design-system';
 import { EmployeeService } from '../../services/employee.service';
@@ -8,7 +8,7 @@ import { EmployeeSummary } from '../../models/employee.model';
 @Component({
   selector: 'vyracare-employee-registration-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, VcButtonComponent, VcHeadingComponent, VcIconButtonComponent, VcSearchComponent, VcTextComponent, VcTooltipComponent],
+  imports: [RouterLink, VcButtonComponent, VcHeadingComponent, VcIconButtonComponent, VcSearchComponent, VcTextComponent, VcTooltipComponent],
   templateUrl: './employee-registration.component.html',
   styleUrl: './employee-registration.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

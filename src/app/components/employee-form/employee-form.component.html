@@ -80,13 +80,17 @@
       ></vc-checkbox>
 
       <div class="form-actions">
-        <vc-button *ngIf="showReset" type="button" variant="ghost" (click)="resetForm()">Limpar</vc-button>
+        @if (showReset) {
+          <vc-button type="button" variant="ghost" (click)="resetForm()">Limpar</vc-button>
+        }
         <vc-button type="submit" [loading]="loading" [disabled]="loading">
           {{ loading ? 'Salvando...' : submitLabel }}
         </vc-button>
       </div>
 
-      <p class="error-banner" *ngIf="error">{{ error }}</p>
+      @if (error) {
+        <p class="error-banner">{{ error }}</p>
+      }
     </div>
   </fieldset>
 </form>
