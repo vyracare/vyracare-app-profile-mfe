@@ -22,7 +22,9 @@
 
     <vc-search class="search-row" id="employee-search" label="Buscar funcionário" placeholder="Nome, telefone ou email" [action]="true" actionLabel="Buscar funcionário" (search)="search($event)"></vc-search>
 
-    <p class="message error" *ngIf="listError()" role="alert">{{ listError() }}</p>
+    @if (listError()) {
+      <p class="message error" role="alert">{{ listError() }}</p>
+    }
 
     <div class="table-wrapper">
       <table>
@@ -30,69 +32,81 @@
           <tr><th>Funcionário</th><th>Telefone</th><th>E-mail</th><th>Cargo</th><th>Status</th><th>Ações</th></tr>
         </thead>
         <tbody>
-          <tr *ngIf="listLoading()"><td colspan="6" class="empty">Carregando funcionários...</td></tr>
-          <tr *ngIf="!listLoading() && employees().length === 0"><td colspan="6" class="empty">Nenhum funcionário encontrado.</td></tr>
-          <tr *ngFor="let employee of employees(); trackBy: trackEmployee">
-            <td data-label="Funcionário"><strong>{{ employee.fullName }}</strong></td>
-            <td>{{ employee.phone || 'Não informado' }}</td>
-            <td data-label="E-mail">{{ employee.email }}</td>
-            <td>{{ employee.role || 'Não informado' }}</td>
-            <td>
-              <span class="status" [class.active]="employee.active" [class.inactive]="!employee.active">
-                {{ employee.active ? 'Ativo' : 'Inativo' }}
-              </span>
-            </td>
-            <td class="actions-cell" data-label="Ações">
-              <vc-tooltip text="Editar funcionário" position="top">
-                <vc-icon-button icon="pencil-square" ariaLabel="Editar funcionário" variant="soft" (action)="editEmployee(employee)"></vc-icon-button>
-              </vc-tooltip>
-              <vc-tooltip [text]="employee.active ? 'Inativar funcionário' : 'Ativar funcionário'" position="top">
-                <vc-icon-button
-                  [icon]="employee.active ? 'person-x' : 'person-check'"
-                  [ariaLabel]="employee.active ? 'Inativar funcionário' : 'Ativar funcionário'"
-                  variant="soft"
-                  (action)="requestStatusChange(employee)"
-                ></vc-icon-button>
-              </vc-tooltip>
-              <vc-tooltip text="Excluir funcionário" position="top">
-                <vc-icon-button icon="trash" ariaLabel="Excluir funcionário" variant="soft" (action)="requestDelete(employee)"></vc-icon-button>
-              </vc-tooltip>
-            </td>
-          </tr>
+          @if (listLoading()) {
+            <tr><td colspan="6" class="empty">Carregando funcionários...</td></tr>
+          }
+          @if (!listLoading() && employees().length === 0) {
+            <tr><td colspan="6" class="empty">Nenhum funcionário encontrado.</td></tr>
+          }
+          @for (employee of employees(); track trackEmployee($index, employee)) {
+            <tr>
+              <td data-label="Funcionário"><strong>{{ employee.fullName }}</strong></td>
+              <td>{{ employee.phone || 'Não informado' }}</td>
+              <td data-label="E-mail">{{ employee.email }}</td>
+              <td>{{ employee.role || 'Não informado' }}</td>
+              <td>
+                <span class="status" [class.active]="employee.active" [class.inactive]="!employee.active">
+                  {{ employee.active ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
+              <td class="actions-cell" data-label="Ações">
+                <vc-tooltip text="Editar funcionário" position="top">
+                  <vc-icon-button icon="pencil-square" ariaLabel="Editar funcionário" variant="soft" (action)="editEmployee(employee)"></vc-icon-button>
+                </vc-tooltip>
+                <vc-tooltip [text]="employee.active ? 'Inativar funcionário' : 'Ativar funcionário'" position="top">
+                  <vc-icon-button
+                    [icon]="employee.active ? 'person-x' : 'person-check'"
+                    [ariaLabel]="employee.active ? 'Inativar funcionário' : 'Ativar funcionário'"
+                    variant="soft"
+                    (action)="requestStatusChange(employee)"
+                  ></vc-icon-button>
+                </vc-tooltip>
+                <vc-tooltip text="Excluir funcionário" position="top">
+                  <vc-icon-button icon="trash" ariaLabel="Excluir funcionário" variant="soft" (action)="requestDelete(employee)"></vc-icon-button>
+                </vc-tooltip>
+              </td>
+            </tr>
+          }
         </tbody>
       </table>
     </div>
   </section>
 
-  <div class="modal-backdrop" *ngIf="statusModalOpen()" (click)="cancelStatusChange()">
-    <section class="modal confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="status-title" (click)="$event.stopPropagation()">
-      <vc-heading id="status-title" [level]="2">{{ selectedEmployee()?.active ? 'Inativar funcionário' : 'Ativar funcionário' }}</vc-heading>
-      <vc-text>Confirma a alteração de status de {{ selectedEmployee()?.fullName }}?</vc-text>
-      <vc-text *ngIf="selectedEmployee()?.active" [muted]="true">
-        O funcionário deixará de acessar o sistema em novos logins e não aparecerá nos seletores operacionais.
-      </vc-text>
-      <div class="modal-actions">
-        <vc-button type="button" variant="secondary" [disabled]="statusLoading()" (click)="cancelStatusChange()">Cancelar</vc-button>
-        <vc-button type="button" [loading]="statusLoading()" [disabled]="statusLoading()" (click)="confirmStatusChange()">
-          {{ selectedEmployee()?.active ? 'Confirmar inativação' : 'Confirmar ativação' }}
-        </vc-button>
-      </div>
-    </section>
-  </div>
+  @if (statusModalOpen()) {
+    <div class="modal-backdrop" (click)="cancelStatusChange()">
+      <section class="modal confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="status-title" (click)="$event.stopPropagation()">
+        <vc-heading id="status-title" [level]="2">{{ selectedEmployee()?.active ? 'Inativar funcionário' : 'Ativar funcionário' }}</vc-heading>
+        <vc-text>Confirma a alteração de status de {{ selectedEmployee()?.fullName }}?</vc-text>
+        @if (selectedEmployee()?.active) {
+          <vc-text [muted]="true">
+            O funcionário deixará de acessar o sistema em novos logins e não aparecerá nos seletores operacionais.
+          </vc-text>
+        }
+        <div class="modal-actions">
+          <vc-button type="button" variant="secondary" [disabled]="statusLoading()" (click)="cancelStatusChange()">Cancelar</vc-button>
+          <vc-button type="button" [loading]="statusLoading()" [disabled]="statusLoading()" (click)="confirmStatusChange()">
+            {{ selectedEmployee()?.active ? 'Confirmar inativação' : 'Confirmar ativação' }}
+          </vc-button>
+        </div>
+      </section>
+    </div>
+  }
 
-  <div class="modal-backdrop" *ngIf="deleteModalOpen()" (click)="cancelDelete()">
-    <section class="modal confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="delete-title" (click)="$event.stopPropagation()">
-      <vc-heading id="delete-title" [level]="2">Excluir funcionário</vc-heading>
-      <vc-text>Confirma a exclusão de {{ employeeToDelete()?.fullName }}?</vc-text>
-      <vc-text [muted]="true">
-        Esta ação é permanente e removerá o cadastro e a credencial de acesso do funcionário.
-      </vc-text>
-      <div class="modal-actions">
-        <vc-button type="button" variant="secondary" [disabled]="deleteLoading()" (click)="cancelDelete()">Cancelar</vc-button>
-        <vc-button type="button" [loading]="deleteLoading()" [disabled]="deleteLoading()" (click)="confirmDelete()">
-          Confirmar exclusão
-        </vc-button>
-      </div>
-    </section>
-  </div>
+  @if (deleteModalOpen()) {
+    <div class="modal-backdrop" (click)="cancelDelete()">
+      <section class="modal confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="delete-title" (click)="$event.stopPropagation()">
+        <vc-heading id="delete-title" [level]="2">Excluir funcionário</vc-heading>
+        <vc-text>Confirma a exclusão de {{ employeeToDelete()?.fullName }}?</vc-text>
+        <vc-text [muted]="true">
+          Esta ação é permanente e removerá o cadastro e a credencial de acesso do funcionário.
+        </vc-text>
+        <div class="modal-actions">
+          <vc-button type="button" variant="secondary" [disabled]="deleteLoading()" (click)="cancelDelete()">Cancelar</vc-button>
+          <vc-button type="button" [loading]="deleteLoading()" [disabled]="deleteLoading()" (click)="confirmDelete()">
+            Confirmar exclusão
+          </vc-button>
+        </div>
+      </section>
+    </div>
+  }
 </main>
